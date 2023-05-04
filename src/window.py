@@ -19,7 +19,7 @@ def pos_in_rect(rect, pos):
 
 class Window:
     # Create the pop-up game window.
-    def __init__(self, width = 800, height = 600, square_size=50, wall_width=10,
+    def __init__(self, width = Screen_Dim.WIDTH, height = Screen_Dim.HEIGHT, square_size = Board_Dim.SQ_SIZE, wall_width = Board_Dim.WALL_WIDTH,
                  title = "Quoridor", background_color = Colors.light_gray):
         self.width = width
         self.height = height
@@ -43,135 +43,74 @@ class Window:
         # Fill the starting background with a silver color.
         self.win.fill(self.background_color)
             
-        self.top_left = (20, 20)
-        self.side_board = 9 * self.square_size + 10 * self.wall_width
-        
-        # Add quit button
-        self.button_quit = Button("Quit", self.side_board + 60,
-                                  self.side_board - 50, Colors.red)
-        self.buttons = [self.button_quit]
+        self.top_left = (70, 70)
+        self.side_board = self.top_left[0] * 2 + 9 * self.square_size + 10 * self.wall_width
 
-        self.title = Text("Quoridor", Colors.black, size=50)
-        self.info = Text("Welcome to Quoridor!", Colors.black, size=45)
+        # Display the title of the game
+        self.title = Text("Quoridor", 
+                          (self.side_board + 110, 50), Colors.black, size=50)
 
-    def draw_buttons(self):
-        """Draw buttons"""
-        for b in self.buttons:
-            if b.show == True:
-                b.draw(self.win)
-
-    def redraw_window(self, game, players, walls, pos):
-        """Redraw the full window"""
-        self.win.fill(self.background_color)
-        self.draw_game_board(pos)
-        self.draw_finish_lines(players)
-        self.draw_right_panel(game, players)
-        self.draw_buttons()
-        players.draw(self)
-        walls.draw()
-        self.info.draw(self.win, (self.top_left[0], self.height - 50))
-        pygame.display.update()
-
-
-class Setup_Window(Window):
-    # Create the pop-up game window.
-    def __init__(self, width = 800, height = 600, square_size=50, wall_width=10,
-                 title = "Quoridor", background_color = Colors.light_gray):
-        super().__init__(width = 800, height = 600, square_size=50, wall_width=10,
-                 title = "Quoridor", background_color = Colors.light_gray)
-        
         # Add text asking the user how many players will play
-        self.how_many_players = Text("How many players will play this game?", Colors.black, size = 30)
-        self.how_many_players.draw(self.win, (self.side_board + 30,
-                                  self.side_board - 175))
+        self.how_many_players = Text("How many players will play this game?", 
+                                     (self.side_board + 40, 150), Colors.black, size = 20)
 
         # Add player count button
-        self.button_player_count_2 = Button("2", self.side_board + 30,
-                                  self.side_board - 150, Colors.red, 30)
-        self.button_player_count_3 = Button("3", self.side_board + 60,
-                                  self.side_board - 150, Colors.red, 30)
-        self.button_player_count_4 = Button("4", self.side_board + 90,
-                                  self.side_board - 150, Colors.red, 30)
-        self.buttons = [self.button_player_count_2, self.button_player_count_3, self.button_player_count_4, self.button_quit]
-
-        # Add Start button
-        self.button_restart = Button("Start", self.side_board + 60,
-                                     self.side_board - 100, Colors.red,
-                                     show=False)
-
-        self.title = Text("Quoridor", Colors.black, size=50)
-        self.info = Text("Welcome to Quoridor!", Colors.black, size=45)
-
-         # Game Loop
-        running = True
-        while running == True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-
-            pygame.display.update()
-
-        pygame.quit()
-
-
-class Game_Window(Window):
+        self.button_2_players = Button("2", self.side_board + 100, 200, 
+                                       Colors.blue, 40)
+        self.button_3_players = Button("3", self.side_board + 200, 200, 
+                                       Colors.red, 40)
+        self.button_4_players = Button("4", self.side_board + 300, 200, 
+                                       Colors.red, 40)
         
-    def __init__(self, width = 800, height = 600, square_size=50, wall_width=10,
-                 title = "Quoridor", background_color = Colors.light_gray):
-        super().__init__(width = 800, height = 600, square_size=50, wall_width=10,
-                 title = "Quoridor", background_color = Colors.light_gray)
-        self.top_left = (20, 20)
-        self.side_board = 9 * self.square_size + 10 * self.wall_width
+        # Add text asking the user how many players will play
+        self.human_or_bot = Text("Will each player be a human or a bot?", 
+                                 (self.side_board + 40, 300), Colors.black, size = 20)
+        
+        # Add player count button
+        self.player_1 = Button("H", self.side_board + 50, 350, 
+                               Colors.red, 40)
+        self.player_2 = Button("H", self.side_board + 150, 350, 
+                               Colors.red, 40)
+        self.player_3 = Button("H", self.side_board + 250, 350, 
+                               Colors.red, 40, show = False)
+        self.player_4 = Button("H", self.side_board + 350, 350, 
+                               Colors.red, 40, show = False)
+        
+        # Add text for the human vs bot key.
+        self.human = Text("Red = Human", 
+                          (self.side_board + 100, 410), Colors.black, size = 18)
+        self.bot = Text("Blue = Bot", 
+                       (self.side_board + 250, 410), Colors.black, size = 18)
 
+        # Add start button
+        self.button_start = Button("Start", self.side_board + 70, 500, 
+                                   Colors.red)
+        
+        # Add wall button
+        self.button_wall = Button("Wall", self.side_board + 100, 350, 
+                                  Colors.red, show = False)
+        
         # Add restart button
-        self.button_restart = Button("Restart", self.side_board + 60,
-                                     self.side_board - 100, Colors.red,
-                                     show=False)
+        self.button_restart = Button("Restart", self.side_board + 70, self.side_board - 100, 
+                                   Colors.red, show = False)
         
         # Add quit button
-        self.button_quit = Button("Quit", self.side_board + 60,
-                                  self.side_board - 50, Colors.red)
-        self.buttons = [self.button_restart, self.button_quit]
-
-        self.title = Text("Quoridor", Colors.black, size=50)
-        self.info = Text("Welcome to Quoridor!", Colors.black, size=45)
+        self.button_quit = Button("Quit", self.side_board + 250, 500, 
+                                  Colors.red)
         
-        # What does this do?
-        '''
-        self.coords = Coords(self)
-        '''
+        # Draw text and buttons that are supposed to be showing.
+        self.draw_text()
+        self.draw_buttons()
 
-    # From intro video. Is this needed? Delete?
-    '''
-    # Game Loop
-    running = True
-    while running == True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-
-        pygame.display.update()
-
-    pygame.quit()
-    '''
-
-    # Is this needed? Delete?
-    '''
-    def update_info(self, text, color = None):
-        """Update info text"""
-        self.info.text = text
-        if color is not None:
-            self.info.color = color
-    '''
 
     def draw_game_board(self, pos):
         '''Draw the game board'''
         for c in self.coords.coords:
             rect = c.rect
             if pos_in_rect(rect, pos):
-                color = Colors.grey_dark
-            else:
                 color = Colors.grey
+            else:
+                color = Colors.white
                 wall_east = c.wall_east
                 wall_south = c.wall_south
                 if wall_east and pos_in_rect(wall_east.rect_small, pos):
@@ -221,19 +160,30 @@ class Game_Window(Window):
                 text_p.draw(self.win, (x, y + 100*p.num_player + 100))
 
     def draw_buttons(self):
-        """Draw buttons"""
-        for b in self.buttons:
-            if b.show:
+        '''Draw buttons'''
+        for b in Button.instances:
+            if b.show == True:
                 b.draw(self.win)
+
+    def draw_text(self):
+        '''Draw buttons'''
+        for t in Text.instances:
+            if t.show == True:
+                t.draw(self.win, t.pos)
 
     def redraw_window(self, game, players, walls, pos):
         """Redraw the full window"""
         self.win.fill(self.background_color)
         self.draw_game_board(pos)
+
+        '''
         self.draw_finish_lines(players)
         self.draw_right_panel(game, players)
+        '''
         self.draw_buttons()
+        '''
         players.draw(self)
         walls.draw()
+        '''
         self.info.draw(self.win, (self.top_left[0], self.height - 50))
         pygame.display.update()

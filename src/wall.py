@@ -1,5 +1,5 @@
 import pygame
-
+import const
 
 class Wall:
     """Create a wall"""
@@ -44,11 +44,11 @@ class Wall:
         win = self.win
         (x, y) = self.coord1.top_left
         if self.orient == "e":
-            return (x + win.case_side, y,
-                    win.wall_width, 2*win.case_side + win.wall_width)
+            return (x + win.square_size, y,
+                    win.wall_width, 2*win.square_size + win.wall_width)
         elif self.orient == "s":
-            return (x, y + win.case_side,
-                    2*win.case_side + win.wall_width, win.wall_width)
+            return (x, y + win.square_size,
+                    2*win.square_size + win.wall_width, win.wall_width)
         return None
 
     def make_rect_small(self):
@@ -56,9 +56,9 @@ class Wall:
         win = self.win
         (x, y) = self.coord1.top_left
         if self.orient == "e":
-            return (x + win.case_side, y, win.wall_width, win.case_side)
+            return (x + win.square_size, y, win.wall_width, win.square_size)
         elif self.orient == "s":
-            return (x, y + win.case_side, win.case_side, win.wall_width)
+            return (x, y + win.square_size, win.square_size, win.wall_width)
         return None
 
     def draw(self, color):

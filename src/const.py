@@ -1,14 +1,19 @@
 # Screen dimensions
-WIDTH = 800
-HEIGHT = 600
-SCREEN_SIZE = (WIDTH, HEIGHT)
+class Screen_Dim:
+    WIDTH = 1120
+    HEIGHT = 600
+    SCREEN_SIZE = (WIDTH, HEIGHT)
 
 # Board dimensions
-COLS = 9
-ROWS = 9
-WALLS = 10
-SQSIZE = 50
-WALL_SIZE = 10
+class Board_Dim:
+    COLS = 9
+    ROWS = 9
+    WALLS = 10
+    SQ_SIZE = 50
+    WALL_WIDTH = 10
+
+# Frames per second
+FPS = 60
 
 class Colors:
     # Colors to be used in the game
@@ -22,4 +27,3 @@ class Colors:
     black = (0, 0, 0)
     light_gray = (200, 200, 200)
     gray = (128, 128, 128)
-    dark_gray = (50, 50, 50)

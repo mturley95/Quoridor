@@ -53,20 +53,20 @@ class Coord:
     def make_top_left(self):
         """Return the top left point of a coord on a window"""
         win = self.win
-        x = ((win.wall_width + win.case_side)*self.x
+        x = ((win.wall_width + win.square_size)*self.x
              + win.wall_width + win.top_left[0])
-        y = ((win.wall_width + win.case_side)*self.y
+        y = ((win.wall_width + win.square_size)*self.y
              + win.wall_width + win.top_left[1])
         return (x, y)
 
     def make_middle(self):
         """Return the middle point of a coord on a window"""
         win = self.win
-        x = ((win.wall_width + win.case_side)*self.x
-             + (win.wall_width + win.case_side // 2)
+        x = ((win.wall_width + win.square_size)*self.x
+             + (win.wall_width + win.square_size // 2)
              + win.top_left[0])
-        y = ((win.wall_width + win.case_side)*self.y
-             + (win.wall_width + win.case_side // 2)
+        y = ((win.wall_width + win.square_size)*self.y
+             + (win.wall_width + win.square_size // 2)
              + win.top_left[1])
         return (x, y)
 
@@ -74,7 +74,7 @@ class Coord:
         """Return the rectangle of the coord"""
         win = self.win
         x, y = self.top_left
-        return (x, y, win.case_side, win.case_side)
+        return (x, y, win.square_size, win.square_size)
 
     def make_wall_east(self):
         """Return the east wall of the coord"""
