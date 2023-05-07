@@ -295,14 +295,14 @@ class Players:
         elif self.player_count == 3:
             self.players = [
                 Player(0, 7, "north", Colors.blue, coords.find_coord(4, 0), win = self.win),
-                Player(1, 7, "south", Colors.red, coords.find_coord(8, 4), win = self.win),
-                Player(2, 7, "east", Colors.green, coords.find_coord(4, 8), win = self.win)]
+                Player(1, 7, "south", Colors.red, coords.find_coord(4, 8), win = self.win),
+                Player(2, 7, "east", Colors.green, coords.find_coord(8, 4), win = self.win)]
         
         elif player_count == 4:
             self.players = [
                 Player(0, 5, "north", Colors.blue, coords.find_coord(4, 0), win = self.win),
-                Player(1, 5, "south", Colors.red, coords.find_coord(8, 4), win = self.win),
-                Player(2, 5, "east", Colors.green, coords.find_coord(4, 8), win = self.win),
+                Player(1, 5, "south", Colors.red, coords.find_coord(4, 8), win = self.win),
+                Player(2, 5, "east", Colors.green, coords.find_coord(8, 4), win = self.win),
                 Player(3, 5, "west", Colors.yellow, coords.find_coord(0, 4), win = self.win)]
 
     def draw(self, win):
