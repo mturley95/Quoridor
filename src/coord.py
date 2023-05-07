@@ -1,19 +1,18 @@
 import pygame
 from wall import Wall
 
-
 class Coord:
-    """Create a coord"""
+    '''Create a coordinate.'''
     def __init__(self, x, y, win, coords):
         self.win = win
         self.coords = coords
 
         self.x = x
         self.y = y
-        self.tuple = (x, y)
-        self.is_occuped = False
+        self.pos = (x, y)
+        self.occupied = False
 
-        # Window attributs
+        # Window attributes.
         self.top_left = self.make_top_left()
         self.middle = self.make_middle()
         self.rect = self.make_rect()
@@ -57,7 +56,8 @@ class Coord:
              + win.wall_width + win.top_left[0])
         y = ((win.wall_width + win.square_size)*self.y
              + win.wall_width + win.top_left[1])
-        return (x, y)
+        pos = (x, y)
+        return pos
 
     def make_middle(self):
         """Return the middle point of a coord on a window"""
@@ -68,7 +68,8 @@ class Coord:
         y = ((win.wall_width + win.square_size)*self.y
              + (win.wall_width + win.square_size // 2)
              + win.top_left[1])
-        return (x, y)
+        pos = (x, y)
+        return pos
 
     def make_rect(self):
         """Return the rectangle of the coord"""
@@ -132,11 +133,11 @@ class Coords:
     """Manage the coords"""
     def __init__(self, win):
         self.win = win
-        self.coords = self.make_coords()
+        self.coords = self.make_coords_grid()
         self.link_coords()
         self.make_walls()
 
-    def make_coords(self):
+    def make_coords_grid(self):
         """Make coords"""
         coords = []
         for x in range(9):
@@ -163,4 +164,4 @@ class Coords:
     def reset(self):
         """Reset coords"""
         for c in self.coords:
-            c.is_occuped = False
+            c.occupied = False
