@@ -1,10 +1,12 @@
 import pygame
-from window import *
-from player import Players
-from game import Game
-from wall import Walls
+from src.const import *
+from src.window import *
+from src.player import Players
+from src.game import Game
+from src.wall import Walls
+from src.board import Coords
 
-def click_restart(win):
+def click_restart(win, coords, players, walls):
     '''
     When the restart button is clicked,
     perform the following actions:
@@ -12,41 +14,52 @@ def click_restart(win):
     Add more info about this function's parameters here.
     '''
 
+    # Stop the game running.
+    setup = True
+    running = False
+    end = False
+
+    # Clear all buttons from the screen.
+    for button in Button.instances:
+        button.set_show(False)
+        button.set_selected(False)
+
+    # Clear all text from the screen.
+    for text in Text.instances:
+        text.set_show(False)
+
+    # Show the title, welcome text, and info text.
+    win.welcome.set_show(True)
+    win.title.set_show(True)
+    win.info.set_show(True)
+    
     # Show the user the buttons asking them to select the number of players.
     win.how_many_players.set_show(True)
     win.button_2_players.set_show(True)
     win.button_3_players.set_show(True)
     win.button_4_players.set_show(True)
 
-    # Do not show the remainder of the buttons until the user picks the number of players.
-    win.button_2_players.set_selected(False)
-    win.button_3_players.set_selected(False)
-    win.button_4_players.set_selected(False)
-    win.human_or_bot.set_show(False)
-    win.player_1_t.set_show(False)
-    win.player_2_t.set_show(False)
-    win.player_3_t.set_show(False)
-    win.player_4_t.set_show(False)
-    win.button_hb_player_1.set_show(False)
-    win.button_hb_player_2.set_show(False)
-    win.button_hb_player_3.set_show(False)
-    win.button_hb_player_4.set_show(False)
-    win.button_hb_player_1.set_selected(False)
-    win.button_hb_player_2.set_selected(False)
-    win.button_hb_player_3.set_selected(False)
-    win.button_hb_player_4.set_selected(False)
-    win.button_wall.set_show(False)
-    win.button_start.set_show(False)
-    win.button_restart.set_show(False)
+    # Show the quit button.
+    win.button_quit.set_show(True)
 
     # Reset the board spaces.
     coords.reset()
+
     # Reset the players.
     players.reset(coords)
+
     # Reset the walls.
     walls.reset()
+
     # Reset the paths to finish.
     # pf.reset()
+
+    # Set the player_count = 0
+    player_count = 0
+    players = Players(player_count, coords, win)
+
+    return setup, running, end, players
+
 
 def click_button_2_players(win, coords):
     '''
@@ -71,6 +84,9 @@ def click_button_2_players(win, coords):
     win.button_hb_player_2.set_show(True)
     win.button_hb_player_3.set_show(False)
     win.button_hb_player_4.set_show(False)
+
+    # Stop showing the welcome text.
+    win.welcome.set_show(False)
 
     # Show the start button if ready to begin.
     win.button_start.set_show(True)
@@ -106,6 +122,9 @@ def click_button_3_players(win, coords):
     win.button_hb_player_3.set_show(True)
     win.button_hb_player_4.set_show(False)
 
+    # Stop showing the welcome text.
+    win.welcome.set_show(False)
+
     # Show the start button if ready to begin.
     win.button_start.set_show(True)
 
@@ -139,6 +158,9 @@ def click_button_4_players(win, coords):
     win.button_hb_player_2.set_show(True)
     win.button_hb_player_3.set_show(True)
     win.button_hb_player_4.set_show(True)
+
+    # Stop showing the welcome text.
+    win.welcome.set_show(False)
 
     # Show the start button if ready to begin.
     win.button_start.set_show(True)
@@ -244,16 +266,6 @@ def click_button_start(win):
     win.button_start.set_show(False)
     win.button_restart.set_show(True)
 
-    # Determine the number of players from the user input.
-    if win.button_2_players.selected == True:
-        player_count = 2
-    
-    elif win.button_3_players.selected == True:
-        player_count = 3
-    
-    elif win.button_4_players.selected == True:
-        player_count = 4
-
     # Determine whether each player is human or a bot and add their value to a dictionary.
     # Start an empty player types dictionary.
     player_types = {}
@@ -278,44 +290,18 @@ def click_button_start(win):
     else:
         player_types[4] = ['human']
 
-    '''
-    Show player wall info on the right panel.
-    '''
-
-    # Start the game.
-    coords = win.coords
-    players = Players(player_count, coords, win)
-    walls = Walls()
-    # pf = PathFinder()
-
-    last_play = ''
-    running = True
-    ready = False
-    start = False
-
-    while running == True:
-        clock.tick(FPS)
-        game = n.get_game()
-
-        # Start a game
-        '''Review this code and fix it to get the game running immediately.'''
-        if not start:
-            if not ready:
-                players.set_names(game.names)
-                ready = game.ready()
-            if game.running:
-                current_p = players.players[game.current_player]
-                win.update_info(f"Let's go! {current_p.name} plays!",
-                                current_p.color)
-                start = True
-
-    # Do something with player_count, player_types
+    return player_types
+    # Do something with player_types in another function
 
 def click_button_wall(win):
-    win.button_wall.set_selected(True)
+
+    # If the button was not selected, now select it.
+    if win.button_wall.selected == False:
+        win.button_wall.set_selected(True)
+    # If the button was selected, deselect it.
+    else:
+        win.button_wall.set_selected(False)
     # wall.select()
     '''
     Add check to ensure this button is selected when playing a wall.
     '''
-    pass
-

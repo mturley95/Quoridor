@@ -1,5 +1,5 @@
 import pygame
-from wall import Wall
+from src.wall import Wall
 
 class Coord:
     '''Create a coordinate.'''
@@ -127,6 +127,34 @@ class Coord:
     def draw(self, color):
         """Draw the rectangle of a coord"""
         pygame.draw.rect(self.win.win, color, self.rect)
+
+    def click(self, pos):
+        '''
+        Return True if pos is in the button rectangle.
+        
+        Add more info about initialization parameters here.
+        '''
+
+        # Separate out x and y coordinates based on input position.
+        pos_x, pos_y = pos
+        
+        # Checks to see if input position was within the button area.
+        if (self.rect[0] <= pos_x and pos_x <= self.rect[0] + self.rect[2] 
+        and self.rect[1] <= pos_y and pos_y <= self.rect[1] + self.rect[3]) == True:
+            # If so, return True
+            return True
+    
+
+    def is_occupied(self, players):
+        '''
+        Return True if the coordinate is occupied.
+        
+        Add more info about the function's parameters here.
+        '''
+
+        for p in players.players:
+            if p.coord.x == self.x and p.coord.y == self.y:
+                return True
 
 
 class Coords:

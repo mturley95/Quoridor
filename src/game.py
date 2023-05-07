@@ -1,3 +1,5 @@
+from src.player import Players
+
 class Game:
     '''
     Create a game.
@@ -23,6 +25,10 @@ class Game:
         self.winner = ''
         
 
+    def set_player_count(self, new_player_count):
+        self.player_count = new_player_count
+    
+    
     def add_players(self, player_count):
         '''
         Add a player.
@@ -49,7 +55,7 @@ class Game:
         return current
     
 
-    def get_name_current(self):
+    def get_name_current(self, players):
         '''
         Return the name of the current player.
         
@@ -57,7 +63,7 @@ class Game:
         '''
 
         # Return the name of the current player.
-        return self.players[self.current_player]
+        return players.players[self.current_player].name
     
 
     def start(self):
@@ -75,7 +81,7 @@ class Game:
         print("Quoridor game started!")
 
 
-    def play(self):
+    def play(self, players):
         '''
         Get a move.
         
@@ -83,15 +89,22 @@ class Game:
         '''
 
         # If the player wins,
-        if player.has_win() == True:
+        if players.players[self.current_player].has_win\
+            (players.players[self.current_player].coord) == True:
             # Print the winner's name.
-            print(f"{self.get_name_current()} wins!")
-            self.winner = self.get_name_current()
+            self.winner = self.get_name_current(players)
+            print(f"{self.winner} wins!")
             self.current_player = -1
             # Stop running the program.
             self.running = False
+            running = False
+            end = True
+            return running, end
 
         # If not a winning play, 
         else:
             # Go to the next player.
+            running = True
+            end = False
             self.current_player = self.next_player(self.current_player)
+            return running, end

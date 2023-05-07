@@ -1,7 +1,7 @@
 import pygame
-from window import *
-from const import Colors
-from wall import Walls
+from src.window import *
+from src.const import Colors
+from src.wall import Walls
 
 
 class Player():
@@ -74,13 +74,13 @@ class Player():
             # then they can play.
             return True
     
-    def pos_moves(self, coord):
+    def pos_moves(self, coord, walls, players):
         
         # List the possible move directions. 
         move_dirs = [coord.north, coord.south, coord.east, coord.west]
 
         # Make an empty list of the possible moves.
-        pos_moves = []
+        pos_moves_list = []
         
         # Index through the different move directions.
         for pos_move in move_dirs:
@@ -90,7 +90,7 @@ class Player():
             if pos_move is not None and walls.no_wall(coord, pos_move):
 
                 # If the position is occupied in the movement direction:
-                if pos_move.occupied:
+                if pos_move.is_occupied(players):
                     
                     # If the direction in question is north:
                     if pos_move == coord.north:
@@ -102,7 +102,7 @@ class Player():
                             pos_move.north.occupied != True:
                             
                             # Add the space two spaces to the north as a possible move.
-                            pos_moves.append(pos_move.north)
+                            pos_moves_list.append(pos_move.north)
                     
                     # If the direction in question is south:
                     if pos_move == coord.south:
@@ -114,7 +114,7 @@ class Player():
                             pos_move.south.occupied != True:
                             
                             # Add the space two spaces to the south as a possible move.
-                            pos_moves.append(pos_move.south)
+                            pos_moves_list.append(pos_move.south)
 
                     # If the direction in question is east:
                     if pos_move == coord.east:
@@ -126,7 +126,7 @@ class Player():
                             pos_move.east.occupied != True:
                             
                             # Add the space two spaces to the east as a possible move.
-                            pos_moves.append(pos_move.east)
+                            pos_moves_list.append(pos_move.east)
 
                     # If the direction in question is west:
                     if pos_move == coord.west:
@@ -138,17 +138,17 @@ class Player():
                             pos_move.west.occupied != True:
                             
                             # Add the space two spaces to the west as a possible move.
-                            pos_moves.append(pos_move.west)
+                            pos_moves_list.append(pos_move.west)
 
                 # If the movement direction is not occupied,
                 else:
                     # Add the adjacent space as a possible move.
-                    pos_moves.append(pos_move)
+                    pos_moves_list.append(pos_move)
 
         # Returns a list of possible move coordinates.
-        return pos_moves
+        return pos_moves_list
     
-    def draw_pos_moves(self, coord):
+    def draw_pos_moves(self, win, coord, walls, players):
         '''
         This function draws purple dots on the player's possible moves.
         
@@ -156,17 +156,36 @@ class Player():
         '''
 
         # Find the possible moves for a piece.
-        pos_moves = pos_moves(coord)
+        self.pos_moves_list = self.pos_moves(coord, walls, players)
 
         # Index through all possible moves.
-        for move in pos_moves:
+        for move in self.pos_moves_list:
             # Draw a purple circle wherever the player can move their piece.
-            pygame.draw.circle(self.win, Colors.purple, move.middle, 15)
+            pygame.draw.circle(win.win, Colors.purple, move.middle, 15)
+        
+
+    def click(self, pos):
+        '''
+        Return True if pos is in the button rectangle.
+        
+        Add more info about initialization parameters here.
+        '''
+
+        # Separate out x and y coordinates based on input position.
+        pos_x, pos_y = pos
+        
+        # Checks to see if input position was within the button area.
+        if (self.coord.rect[0] <= pos_x and pos_x <= self.coord.rect[0] + self.coord.rect[2] 
+        and self.coord.rect[1] <= pos_y and pos_y <= self.coord.rect[1] + self.coord.rect[3]) == True:
+            # If so, return True
+            return True
 
 
-    def piece_selected(self, new_selected_value):
+    def set_selected(self, new_selected_value, win, walls, players):
         self.selected = new_selected_value
-        self.draw_pos_moves(self.coord)
+        if self.selected == True:
+            self.draw_pos_moves(win, self.coord, walls, players)
+
 
     def can_play_wall(self, game):
         '''
@@ -180,16 +199,14 @@ class Player():
             return True
 
 
-    def play_move(self, coord):
+    def play_move(self, pos_coord):
         '''
         Play a move if it is possible.
         
         Add more info about this function's parameters here.
         '''
 
-        for move in pos_moves.list:
-            if move.click(pos):
-                self.coord = move
+        self.coord = pos_coord
 
 
     # def play_put_wall(self, pos, coords, walls,
@@ -200,25 +217,47 @@ class Player():
         for c in coords.coords:
             wall_east = c.wall_east
             wall_south = c.wall_south
-            for w in [wall_east, wall_south]:
-                if (w is not None and pos_in_rect(w.rect_small, pos)
-                        and walls.can_add(w)):
-                    self.send_wall(c, w.orient)
+            for wall in [wall_east, wall_south]:
+                if (wall is not None and pos_in_rect(wall.rect_small, pos)
+                        and walls.can_add(wall)) == True:
+                    
+                    # # Code to run pathfinder once it's working:
                     # if path_finder.play_wall(w, players):
-                    #     self.send_wall(c, w.orient)
-                    #     return ''
+                    #     Do the stuff below:
                     # else:
                     #     return "You can't block players!"
-        return ''
+
+                    num_player = self.num_player
+                    current_p = players.players[num_player]
+                    x = c.x
+                    y = c.y
+                    if wall == wall_east:
+                        orient = 'e'
+                    elif wall == wall_south:
+                        orient = 's'
+                    wall.draw(current_p.color)
+
+                    coord_wall = coords.find_coord(x, y)
+                    if orient == "e":
+                        wall = coord_wall.wall_east
+                    elif orient == "s":
+                        wall = coord_wall.wall_south
+                    wall.set_color(current_p.color)
+                    walls.add_wall(wall)
+                    current_p.walls_remain -= 1
+                    # path_finder.add_wall(wall)
+
+                    return f"Player {current_p.num_player + 1} played a wall."
+        return None
 
     def draw(self, win):
         """Draw player on the game board"""
         (x, y) = self.coord.middle
         pygame.draw.circle(win.win, self.color,
                            (x, y), self.radius)
-        font = pygame.font.SysFont("comicsans", 40)
-        text = font.render(self.name[0], 1, Colors.white)
-        win.win.blit(text, (x - self.radius // 2, y - self.radius // 2))
+        font = pygame.font.SysFont("Arial Bold", 40)
+        text = font.render(self.name[-1], 1, Colors.white)
+        win.win.blit(text, (x - self.radius // 2 + 3, y - self.radius // 2 - 3))
 
     def has_win(self, coord):
         """Return True if the player wins in the coord"""
@@ -247,14 +286,14 @@ class Players:
         elif self.player_count == 3:
             self.players = [
                 Player(0, 7, "north", Colors.blue, coords.find_coord(4, 0), win = self.win),
-                Player(1, 7, "east", Colors.red, coords.find_coord(8, 4), win = self.win),
-                Player(2, 7, "south", Colors.green, coords.find_coord(4, 8), win = self.win)]
+                Player(1, 7, "south", Colors.red, coords.find_coord(8, 4), win = self.win),
+                Player(2, 7, "east", Colors.green, coords.find_coord(4, 8), win = self.win)]
         
         elif player_count == 4:
             self.players = [
                 Player(0, 5, "north", Colors.blue, coords.find_coord(4, 0), win = self.win),
-                Player(1, 5, "east", Colors.red, coords.find_coord(8, 4), win = self.win),
-                Player(2, 5, "south", Colors.green, coords.find_coord(4, 8), win = self.win),
+                Player(1, 5, "south", Colors.red, coords.find_coord(8, 4), win = self.win),
+                Player(2, 5, "east", Colors.green, coords.find_coord(4, 8), win = self.win),
                 Player(3, 5, "west", Colors.yellow, coords.find_coord(0, 4), win = self.win)]
 
     def draw(self, win):
@@ -300,10 +339,10 @@ class Players:
             path_finder.add_wall(wall)
         return True
 
-    def set_names(self, names):
+    def set_names(self):
         """Set the names of players"""
-        for player, name in zip(self.players, names):
-            player.set_name(name)
+        for player in self.players:
+            player.set_name(player.num_player)
 
     def reset(self, coords):
         """Reset the players"""

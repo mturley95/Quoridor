@@ -1,6 +1,6 @@
 # Import necessary libraries.
 import pygame
-from const import Colors
+from src.const import Colors
 
 
 class Text:
@@ -43,7 +43,7 @@ class Text:
         # Set font and size based on input parameters.
         font = pygame.font.SysFont(self.font, self.size)
         # Render the text in the font and color selected.
-        text = font.render(self.text, 1, self.color, None)
+        text = font.render(self.text, 1, self.color, Colors.silver)
 
         # Draw the text object onto the window at the proper position.
         win.blit(text, pos)

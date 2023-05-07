@@ -1,9 +1,9 @@
 # Import necessary libraries.
 import pygame
 import os
-from const import *
-from widgets import Text, Button
-from coord import Coords
+from src.const import *
+from src.disp_obj import Text, Button
+from src.board import Coords
 
 
 def pos_in_rect(rect, pos):
@@ -78,11 +78,20 @@ class Window:
         # right panel information.
         self.side_board = self.top_left[0] * 2 + 9 * self.square_size + 10 * self.wall_width
 
+        # Display game info.
+        self.welcome = Text("Welcome to Quoridor!", (self.top_left[0] + 50, self.height - 70),\
+                         Colors.black, size=45)
+
         # Display the title of the game.
         self.title = Text("Quoridor", 
                           (self.side_board + 115, 50), 
                           Colors.black, size=50)
         
+        # Display the info text.
+        self.info = Text("", (self.side_board + 50, 150), \
+                         Colors.black, size = 40)
+        
+        # Set game board coordinates.
         self.coords = Coords(self)
 
         # Require the user to select how many players will play.
@@ -139,28 +148,35 @@ class Window:
 
         # Add start button to start the game and lock in settings.
         self.button_start = Button("Start", 
-                                   self.side_board + 70, 500, 
+                                   self.side_board + 70, 570, 
                                    Colors.red)
         
         # Add wall button for the user to click and 
         # state their intentions to play a wall.
         self.button_wall = Button("Wall", 
-                                  self.side_board + 160, 420, 
+                                  self.side_board + 160, 500, 
                                   Colors.red, show = False)
         
         # Add restart button for the user to restart the game if desired.
         self.button_restart = Button("Restart", 
-                                     self.side_board + 70, 500, 
+                                     self.side_board + 70, 570, 
                                      Colors.red, show = False)
         
         # Add quit button for the user to quit the game if desired.
         self.button_quit = Button("Quit", 
-                                  self.side_board + 250, 500, 
+                                  self.side_board + 250, 570, 
                                   Colors.red)
         
         # Draw text and buttons that are supposed to be showing on the game window.
         self.draw_text()
         self.draw_buttons()
+
+
+    def update_info(self, text, color = None):
+        """Update info text"""
+        self.info.text = text
+        if color is not None:
+            self.info.color = color
 
 
     def draw_game_board(self, pos):
@@ -299,24 +315,34 @@ class Window:
                     self.win.blit(rotated_text, (20, self.side_board // 2 - 50))
 
 
-    def draw_right_panel(self, game, players):
+    def draw_right_panel_info(self, game, players):
         '''
         Draw the right panel with player's informations.
         
         Add more details about the function parameters here.
         '''
-        # Start the right panel 50 pixels away from the edge of the board.
-        x, y = self.side_board + 50, 20
 
-        # Draw the quoridor title in the right panel.
-        self.title.draw(self.win, (x + 10, y))
+        # Start the right panel 100 pixels away from the edge of the board
+        # and in the middle (vertically) of the right panel.
+        x, y = self.side_board + 100, 260
 
-        # Index through each player.
-        for p in players.players:
-            # Record the player name and how many walls they have remaining.
-            text_p = Text(f"{p.name}: {p.walls_remain} walls", p.color)
-            # Draw the value on the right window.
-            text_p.draw(self.win, (x, y + 100 * p.num_player + 100))
+        if players.player_count > 0:
+            if game.running == True:
+                current_p = players.players[game.current_player]
+                self.update_info(f"It's {current_p.name}'s turn!",
+                                current_p.color)
+                self.info.set_show(True)
+
+                # Index through each player.
+                for p in players.players:
+                    # Record the player name and how many walls they have remaining.
+                    text_p = Text(f"{p.name}: {p.walls_remain} walls     ", \
+                                (x, y + 50 * p.num_player), p.color)
+                    # Draw the value on the right window.
+                    text_p.draw(self.win, text_p.pos)
+
+        else:
+            self.info.set_show(False)
 
 
     def draw_buttons(self):
@@ -353,7 +379,7 @@ class Window:
                 t.draw(self.win, t.pos)
 
 
-    def redraw_window(self, game, players, walls, pos):
+    def redraw_window(self, game, current_p, players, walls, pos):
         '''
         Redraw the full window.
         
@@ -375,8 +401,7 @@ class Window:
         self.draw_finish_lines(players)
 
         # Then, draw the right panel with the player information.
-        # Check to see if this is the way I want this done, maybe change this.
-        # self.draw_right_panel(game, players)
+        self.draw_right_panel_info(game, players)
         
         # Then, draw the player tokens on the board.
         players.draw(self)
@@ -384,9 +409,11 @@ class Window:
         # Then draw any walls that have been used on the board.
         walls.draw()
 
-        # Then, draw general info.
-        # What is this for? Consider removing.
-        # self.info.draw(self.win, (self.top_left[0], self.height - 50))
+        # Draw a player's possible moves if they are selected.
+        if players.player_count > 0:
+            for p in players.players:
+                if p.selected == True:
+                    current_p.draw_pos_moves(self, current_p.coord, walls, players)
 
         # Update the pygame window display.
         pygame.display.update()

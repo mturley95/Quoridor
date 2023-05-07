@@ -1,7 +1,7 @@
 # Screen dimension constants.
 class Screen_Dim:
     # Width of the window including both the game board and the info panel.
-    WIDTH = 1120
+    WIDTH = 1150
     # Height of the window including both the game board and the info panel.
     HEIGHT = 690
     # Window size in tuple form.
