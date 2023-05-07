@@ -64,9 +64,7 @@ class Window:
         pygame.display.set_caption(title)
 
         # Add an icon consisting of a board with a pawn in front.
-        image_path = os.path.join(os.path.dirname(__file__), '32x32_Icons')
-        icon = pygame.image.load(os.path.join(image_path, 'quoridor_board_with_pawn.png'))
-        pygame.display.set_icon(icon)
+        pygame.display.set_icon(Icons.BOARD_WITH_PAWN)
     
         # Fill the starting background with a silver color.
         self.win.fill(self.background_color)

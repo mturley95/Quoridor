@@ -30,7 +30,7 @@ from src.game import Game
 # Controls the board coordinates
 from src.board import Coord
 
-# from pathfinder import *
+# from src.pathfinder import *
 
 
 # Start the quoridor game.

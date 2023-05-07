@@ -1,5 +1,6 @@
 import pygame
 from src.wall import Wall
+from src.const import Board_Dim
 
 class Coord:
     '''Create a coordinate.'''
@@ -33,13 +34,13 @@ class Coord:
 
     def coord_east(self):
         """Return the coord on the east"""
-        if self.x + 1 <= 8:
+        if self.x + 1 <= Board_Dim.ROWS-1:
             return self.coords.find_coord(self.x + 1, self.y)
         return None
 
     def coord_south(self):
         """Return the coord on the south"""
-        if self.y + 1 <= 8:
+        if self.y + 1 <= Board_Dim.COLS-1:
             return self.coords.find_coord(self.x, self.y + 1)
         return None
 
@@ -79,13 +80,13 @@ class Coord:
 
     def make_wall_east(self):
         """Return the east wall of the coord"""
-        if self.east is not None and self.y != 8:
+        if self.east is not None and self.y != Board_Dim.ROWS-1:
             return Wall(self, self.east, self.win)
         return None
 
     def make_wall_south(self):
         """Return the south wall of the coord"""
-        if self.south is not None and self.x != 8:
+        if self.south is not None and self.x != Board_Dim.COLS-1:
             return Wall(self, self.south, self.win)
         return None
 
@@ -168,8 +169,8 @@ class Coords:
     def make_coords_grid(self):
         """Make coords"""
         coords = []
-        for x in range(9):
-            for y in range(9):
+        for x in range(Board_Dim.ROWS):
+            for y in range(Board_Dim.COLS):
                 coords.append(Coord(x, y, self.win, self))
         return coords
 
@@ -187,7 +188,7 @@ class Coords:
 
     def find_coord(self, x, y):
         """Find the coord corresponding to x and y"""
-        return self.coords[x * 9 + y]
+        return self.coords[x * Board_Dim.ROWS + y]
 
     def reset(self):
         """Reset coords"""
