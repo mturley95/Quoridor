@@ -12,7 +12,7 @@ class Player():
     '''
 
     def __init__(self, num_player, walls_remain, orient, color, coord, win, \
-                 radius = 20, selected = False):
+                 selected = False):
         '''
         Initialize the player class.
         
@@ -24,7 +24,6 @@ class Player():
         self.color = color
         self.coord = coord
         self.win = win
-        self.radius = radius
         self.name = ''
         self.walls_remain = walls_remain
         self.selected = selected
@@ -250,14 +249,24 @@ class Player():
                     return f"Player {current_p.num_player + 1} played a wall."
         return None
 
+
     def draw(self, win):
         """Draw player on the game board"""
         (x, y) = self.coord.middle
-        pygame.draw.circle(win.win, self.color,
-                           (x, y), self.radius)
-        font = pygame.font.SysFont("Arial Bold", 40)
-        text = font.render(self.name[-1], 1, Colors.white)
-        win.win.blit(text, (x - self.radius // 2 + 3, y - self.radius // 2 - 3))
+        
+        if self.color == Colors.blue:
+            win.win.blit(Icons.BLUE_PAWN, (x - Icons.BLUE_PAWN.get_width()//2, \
+                                           y - Icons.BLUE_PAWN.get_height()//2))
+        if self.color == Colors.red:
+            win.win.blit(Icons.RED_PAWN, (x - Icons.RED_PAWN.get_width()//2, \
+                                          y - Icons.RED_PAWN.get_height()//2))
+        if self.color == Colors.green:
+            win.win.blit(Icons.GREEN_PAWN, (x - Icons.GREEN_PAWN.get_width()//2, \
+                                            y - Icons.GREEN_PAWN.get_height()//2))
+        if self.color == Colors.yellow:
+            win.win.blit(Icons.YELLOW_PAWN, (x - Icons.YELLOW_PAWN.get_width()//2, \
+                                             y - Icons.YELLOW_PAWN.get_height()//2))
+        
 
     def has_win(self, coord):
         """Return True if the player wins in the coord"""

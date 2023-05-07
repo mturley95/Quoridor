@@ -27,7 +27,7 @@ class Colors:
     '''
     Colors to be used in the game in RGB values.
     
-    Add more infor about the Colors class here.
+    Add more info about the Colors class here.
     '''
     red = (255, 0, 0)
     blue = (0, 0, 255)
