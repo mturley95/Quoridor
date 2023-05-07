@@ -97,11 +97,26 @@ class Player():
                         # on the board and there is no wall present in that direction
                         # and that space is not occupied:
                         if pos_move.north is not None and \
-                            walls.no_wall(pos_move, pos_move.north) and \
+                            walls.no_wall(pos_move, pos_move.north) == True and \
                             pos_move.north.occupied != True:
                             
                             # Add the space two spaces to the north as a possible move.
                             pos_moves_list.append(pos_move.north)
+
+                        if pos_move.north is not None and \
+                            walls.no_wall(pos_move, pos_move.north) != True and \
+                            pos_move.east.occupied != True:
+                            
+                            # Add the space two spaces to the north as a possible move.
+                            pos_moves_list.append(pos_move.east)
+
+                        if pos_move.north is not None and \
+                            walls.no_wall(pos_move, pos_move.north) != True and \
+                            pos_move.west.occupied != True:
+                            
+                            # Add the space two spaces to the north as a possible move.
+                            pos_moves_list.append(pos_move.west)
+
                     
                     # If the direction in question is south:
                     if pos_move == coord.south:
@@ -109,11 +124,26 @@ class Player():
                         # on the board and there is no wall present in that direction
                         # and that space is not occupied:
                         if pos_move.south is not None and \
-                            walls.no_wall(pos_move, pos_move.south) and \
+                            walls.no_wall(pos_move, pos_move.south) == True and \
                             pos_move.south.occupied != True:
                             
                             # Add the space two spaces to the south as a possible move.
                             pos_moves_list.append(pos_move.south)
+
+                        if pos_move.south is not None and \
+                            walls.no_wall(pos_move, pos_move.south) != True and \
+                            pos_move.east.occupied != True:
+                            
+                            # Add the space two spaces to the south as a possible move.
+                            pos_moves_list.append(pos_move.east)
+
+                        if pos_move.south is not None and \
+                            walls.no_wall(pos_move, pos_move.south) != True and \
+                            pos_move.west.occupied != True:
+                            
+                            # Add the space two spaces to the south as a possible move.
+                            pos_moves_list.append(pos_move.west)
+
 
                     # If the direction in question is east:
                     if pos_move == coord.east:
@@ -121,11 +151,26 @@ class Player():
                         # on the board and there is no wall present in that direction
                         # and that space is not occupied:
                         if pos_move.east is not None and \
-                            walls.no_wall(pos_move, pos_move.east) and \
+                            walls.no_wall(pos_move, pos_move.east) == True and \
                             pos_move.east.occupied != True:
                             
                             # Add the space two spaces to the east as a possible move.
                             pos_moves_list.append(pos_move.east)
+
+                        if pos_move.east is not None and \
+                            walls.no_wall(pos_move, pos_move.east) != True and \
+                            pos_move.north.occupied != True:
+                            
+                            # Add the space two spaces to the east as a possible move.
+                            pos_moves_list.append(pos_move.north)
+
+                        if pos_move.east is not None and \
+                            walls.no_wall(pos_move, pos_move.east) != True and \
+                            pos_move.south.occupied != True:
+                            
+                            # Add the space two spaces to the east as a possible move.
+                            pos_moves_list.append(pos_move.south)
+
 
                     # If the direction in question is west:
                     if pos_move == coord.west:
@@ -133,11 +178,25 @@ class Player():
                         # on the board and there is no wall present in that direction
                         # and that space is not occupied:
                         if pos_move.west is not None and \
-                            walls.no_wall(pos_move, pos_move.west) and \
+                            walls.no_wall(pos_move, pos_move.west) == True and \
                             pos_move.west.occupied != True:
                             
                             # Add the space two spaces to the west as a possible move.
                             pos_moves_list.append(pos_move.west)
+
+                        if pos_move.west is not None and \
+                            walls.no_wall(pos_move, pos_move.west) != True and \
+                            pos_move.north.occupied != True:
+                            
+                            # Add the space two spaces to the west as a possible move.
+                            pos_moves_list.append(pos_move.north)
+
+                        if pos_move.west is not None and \
+                            walls.no_wall(pos_move, pos_move.west) != True and \
+                            pos_move.south.occupied != True:
+                            
+                            # Add the space two spaces to the west as a possible move.
+                            pos_moves_list.append(pos_move.south)
 
                 # If the movement direction is not occupied,
                 else:
