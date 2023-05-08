@@ -1,10 +1,6 @@
-import pygame
 from src.const import *
 from src.window import *
 from src.player import Players
-from src.game import Game
-from src.wall import Walls
-from src.board import Coords
 
 def click_restart(win, coords, players, walls):
     '''
@@ -84,6 +80,7 @@ def click_button_2_players(win, coords):
     win.button_hb_player_2.set_show(True)
     win.button_hb_player_3.set_show(False)
     win.button_hb_player_4.set_show(False)
+    win.bot_not_ready.set_show(True)
 
     # Stop showing the welcome text.
     win.welcome.set_show(False)
@@ -121,6 +118,7 @@ def click_button_3_players(win, coords):
     win.button_hb_player_2.set_show(True)
     win.button_hb_player_3.set_show(True)
     win.button_hb_player_4.set_show(False)
+    win.bot_not_ready.set_show(True)
 
     # Stop showing the welcome text.
     win.welcome.set_show(False)
@@ -158,6 +156,7 @@ def click_button_4_players(win, coords):
     win.button_hb_player_2.set_show(True)
     win.button_hb_player_3.set_show(True)
     win.button_hb_player_4.set_show(True)
+    win.bot_not_ready.set_show(True)
 
     # Stop showing the welcome text.
     win.welcome.set_show(False)

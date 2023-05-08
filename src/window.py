@@ -1,6 +1,5 @@
 # Import necessary libraries.
 import pygame
-import os
 from src.const import *
 from src.disp_obj import Text, Button
 from src.board import Coords
@@ -58,7 +57,7 @@ class Window:
         * wall_width (int)
         * title (str)
         * background_color (tuple, int)
-        * win (obj)
+        * win (Pygame Screen: obj)
         * top_left (tuple, int)
         * side_board (int)
         * game_board (tuple, int)
@@ -161,7 +160,7 @@ class Window:
         # Default is human.
         self.human_or_bot = Text("Will each player be a human or a bot?", 
                                  (self.side_board + 40, 300), 
-                                 Colors.black, size = 20)
+                                 Colors.black, size = 20, show = False)
         
         # Add text for each human or bot so the user knows 
         # which player they are selecting.
@@ -177,6 +176,12 @@ class Window:
         self.player_4_t = Text("Player 4", 
                                (self.side_board + 340, 340), 
                                Colors.yellow, size = 18, show = False)
+        
+        # Add text stating that bots aren't ready yet.
+        # Comment out once bots implemented.
+        self.bot_not_ready = Text("Bot functionality has not been implemented yet.", 
+                                 (self.side_board, 430), 
+                                 Colors.black, size = 20, show = False)
         
         # Add buttons for the user to click selecting each player as either
         # human player or a bot.
@@ -213,34 +218,58 @@ class Window:
         self.button_quit = Button("Quit", 
                                   self.side_board + 250, 570, 
                                   Colors.red)
-        
-        # Draw text and buttons that are supposed to be showing on the game window.
-        self.draw_text()
-        self.draw_buttons()
 
 
     def update_info(self, text, color = None):
-        """Update info text"""
+        '''
+        This function updates the text object for the info bar at the top of the right panel.
+        This is used once setup is complete and the game is running or
+        a player has won and the game has ended.
+
+        **Parameters**
+            text: *str*
+                Text to be displayed on the info panel.
+            color: *tuple: int* (int, int, int)
+                (R, G, B):
+                Color of the text to be displayed.
+
+        **Returns**
+            N/A
+        '''
+
+        # Set the text of the Text object to be the input into the function.
         self.info.text = text
+        # If a color is assigned, set the color of the Text object to the input into the function.
         if color is not None:
             self.info.color = color
 
 
     def draw_game_board(self, pos):
         '''
-        Draw the game board.
+        This function draws the game board.
+        It changes the shading of the spaces depending on if the mouse is hovering over them.
         
-        Add more info about the function here.
+        **Parameters**
+            pos: *tuple* (int, int)
+                (x, y): 
+                The current position of the mouse.
+
+        **Returns**
+            N/A
         '''
+
+        # Set the game board rectangle based on its top left coordinates and size.
         game_board = (self.top_left[0], self.top_left[1], \
                       9 * self.square_size + 10 * self.wall_width, \
                       9 * self.square_size + 10 * self.wall_width)
+        # Color the background of the game board white.
         color = Colors.white
+        # Color the background of the game board on the window.
         pygame.draw.rect(self.win, color, game_board)
 
         # For a coordinate in the grid of coordinates for the game board.
         # The coordinate is already associated with a unique position and 
-        # its square size.
+        # its square size and includes all player spaces.
         for c in self.coords.coords:
 
             # Set a rectangle: (x, y, win.square_size, win.square_size).
@@ -249,21 +278,21 @@ class Window:
             # Returns True if the mouse pos in question is in the rectangle.
             if pos_in_rect(rect, pos):
                 # For the position in the rectangle of a space on the board, 
-                # draw the board gray.
+                # draw the board gray (for the player spaces).
                 color = Colors.gray
 
             else:
                 # Otherwise, draw the board light gray for that position.
                 color = Colors.light_gray
                 
-                # Add wall object to the east of the game square
+                # Add wall rectangular space to the east of the game square.
                 wall_east = c.wall_east
 
-                # Add wall object to the south of the game square
+                # Add wall rectangular space to the south of the game square.
                 wall_south = c.wall_south
 
-                # Checks to ensure the wall is in the game board and makes it gray
-                # if it has been played on that location.
+                # Checks to ensure the wall space is in the game board and makes it gray
+                # if the player mouse is on that location (otherwise remains white).
                 if wall_east and pos_in_rect(wall_east.rect_small, pos):
                     wall_east.draw(Colors.gray)
                 elif wall_south and pos_in_rect(wall_south.rect_small, pos):
@@ -275,22 +304,27 @@ class Window:
 
     def draw_finish_lines(self, players):
         '''
-        Draw the finish lines with the player's color.
+        This function draws the finish lines for each player in-play in their respective colors.
         
-        Add more info about function parameters.
+        **Parameters**
+            players: *obj*
+                Class object that includes all active players.
+
+        **Returns**
+            N/A
         '''
 
-        # Index through all players.
+        # Index through all players if the number of players has been determined.
         if players.player_count > 0:
-            for p in players.players:
+            for player in players.players:
 
                 # Check the player orientation for the side of the board that
                 # their piece is starting on.
-                if p.orient == "north":
+                if player.orient == "north":
                     # If the player is starting north, draw a finish line on the
                     # south edge of the board for that player in the player's color.
                     pygame.draw.line(
-                        self.win, p.color,
+                        self.win, player.color,
                         (self.top_left[0] - self.wall_width, self.side_board - self.top_left[1]),
                         (self.side_board - self.top_left[0] + self.wall_width, self.side_board - self.top_left[1]),
                         self.wall_width * 2 + 1)
@@ -299,17 +333,17 @@ class Window:
                     # Set font and size based on input parameters.
                     font = pygame.font.SysFont("Arial", 30)
                     # Render the text in the font and color selected.
-                    text = font.render(f"Player {p.get_num_player() + 1}", 1, p.color, None)
+                    text = font.render(f"Player {player.get_num_player() + 1}", 1, player.color, None)
                     # Rotate the text 180 degrees.
                     rotated_text = pygame.transform.rotate(text, 180)
                     # Draw the text object onto the window at the proper position.
                     self.win.blit(rotated_text, (self.side_board // 2 - 50, 20))
                 
-                elif p.orient == "east":
+                elif player.orient == "east":
                     # If the player is starting east, draw a finish line on the
                     # west edge of the board for that player in the player's color.
                     pygame.draw.line(
-                        self.win, p.color,
+                        self.win, player.color,
                         (self.top_left[0], self.top_left[1] - self.wall_width),
                         (self.top_left[0], self.side_board - self.top_left[1] + self.wall_width),
                         self.wall_width * 2 + 1)
@@ -318,17 +352,17 @@ class Window:
                     # Set font and size based on input parameters.
                     font = pygame.font.SysFont("Arial", 30)
                     # Render the text in the font and color selected.
-                    text = font.render(f"Player {p.get_num_player() + 1}", 1, p.color, None)
+                    text = font.render(f"Player {player.get_num_player() + 1}", 1, player.color, None)
                     # Rotate the text 90 degrees.
                     rotated_text = pygame.transform.rotate(text, 90)
                     # Draw the text object onto the window at the proper position.
                     self.win.blit(rotated_text, (self.side_board - 50, self.side_board // 2 - 50))
                 
-                elif p.orient == "south":
+                elif player.orient == "south":
                     # If the player is starting south, draw a finish line on the
                     # north edge of the board for that player in the player's color.
                     pygame.draw.line(
-                        self.win, p.color,
+                        self.win, player.color,
                         (self.top_left[0] - self.wall_width, self.top_left[1]),
                         (self.side_board - self.top_left[0] + self.wall_width, self.top_left[1]),
                         self.wall_width * 2 + 1)
@@ -337,16 +371,16 @@ class Window:
                     # Set font and size based on input parameters.
                     font = pygame.font.SysFont("Arial", 30)
                     # Render the text in the font and color selected.
-                    text = font.render(f"Player {p.get_num_player() + 1}", 1, p.color, None)
+                    text = font.render(f"Player {player.get_num_player() + 1}", 1, player.color, None)
                     # Draw the text object onto the window at the proper position.
                     self.win.blit(text, (self.side_board // 2 - 50, self.side_board - 50))
                                   
                 
-                elif p.orient == "west":
+                elif player.orient == "west":
                     # If the player is starting west, draw a finish line on the
                     # east edge of the board for that player in the player's color.
                     pygame.draw.line(
-                        self.win, p.color,
+                        self.win, player.color,
                         (self.side_board - self.top_left[0], self.top_left[1] - self.wall_width),
                         (self.side_board - self.top_left[0], self.side_board - self.top_left[1] + self.wall_width),
                         self.wall_width * 2 + 1)
@@ -355,7 +389,7 @@ class Window:
                     # Set font and size based on input parameters.
                     font = pygame.font.SysFont("Arial", 30)
                     # Render the text in the font and color selected.
-                    text = font.render(f"Player {p.num_player + 1}", 1, p.color, None)
+                    text = font.render(f"Player {player.num_player + 1}", 1, player.color, None)
                     # Rotate the text 270 degrees.
                     rotated_text = pygame.transform.rotate(text, 270)
                     # Draw the text object onto the window at the proper position.
@@ -364,73 +398,110 @@ class Window:
 
     def draw_right_panel_info(self, game, players):
         '''
-        Draw the right panel with player's informations.
+        This function draws the right panel with the players' info including
+        the current player's turn notification and each player's wall count.
         
-        Add more details about the function parameters here.
+        **Parameters**
+            game: *obj*
+                Class object that includes information as to whether the game is running and
+                which player is currently active.
+            players: *obj*
+                Class object that includes all active players.
+
+        **Returns**
+            N/A
         '''
 
-        # Start the right panel 100 pixels away from the edge of the board
-        # and in the middle (vertically) of the right panel.
+        # Start the right info panel 100 pixels away from the edge of the board
+        # and spaced vertically in roughly the center of the right panel.
         x, y = self.side_board + 100, 260
-
+        
+        # If the number of players has been determined.
         if players.player_count > 0:
+            # If the game is passed the setup screen and is running.
             if game.running == True:
-                current_p = players.players[game.current_player]
-                self.update_info(f"It's {current_p.name}'s turn!",
-                                current_p.color)
+                # Update the info panel letting the current player know that it's their turn.
+                current_player = players.players[game.current_player_number]
+                self.update_info(f"It's {current_player.name}'s turn!",
+                                current_player.color)
                 self.info.set_show(True)
 
                 # Index through each player.
-                for p in players.players:
+                for player in players.players:
                     # Record the player name and how many walls they have remaining.
-                    text_p = Text(f"{p.name}: {p.walls_remain} walls     ", \
-                                (x, y + 50 * p.get_num_player()), p.color)
+                    text_player = Text(f"{player.name}: {player.walls_remain} walls     ", \
+                                (x, y + 50 * player.get_num_player()), player.color)
                     # Draw the value on the right window.
-                    text_p.draw(self.win, text_p.pos)
+                    text_player.draw(self.win, text_player.pos)
 
+        # If the number of players has not been determined
+        # and the game has not been initiated:
         else:
+            # Don't show the info panel on the right.
             self.info.set_show(False)
 
 
     def draw_buttons(self):
         '''
-        Draw buttons.
+        This function draws the any active buttons onto the window.
         
-        Add more details about the function parameters here.
+        **Parameters**
+            N/A
+
+        **Returns**
+            N/A
         '''
 
         # Index through all added buttons.
-        for b in Button.instances:
+        for button in Button.instances:
             # If the button is showing:
-            if b.show == True:
+            if button.show == True:
                 # If the button is selected:
-                if b.selected == True:
+                if button.selected == True:
                     # Set the button color to blue.
-                    b.set_color(Colors.blue)
+                    button.set_color(Colors.blue)
                 # Otherwise draw the buttons in red.
-                b.draw(self.win)
+                button.draw(self.win)
 
 
     def draw_text(self):
         '''
-        Draw the text.
+        This function draws the any active text onto the window.
         
-        Add more details about the function parameters here.
+        **Parameters**
+            N/A
+
+        **Returns**
+            N/A
         '''
 
         # Index through all created text objects.
-        for t in Text.instances:
+        for text in Text.instances:
             # If the text objects are showing,
-            if t.show == True:
+            if text.show == True:
                 # Draw the text on the window and display it.
-                t.draw(self.win, t.pos)
+                text.draw(self.win, text.pos)
 
 
-    def redraw_window(self, game, current_p, players, walls, pos):
+    def redraw_window(self, game, players, walls, pos):
         '''
-        Redraw the full window.
+        This function redraws the window and updates it with
+        any updated information from the game, players, walls, or mouse.
         
-        Add more details about the function parameters here.
+        **Parameters**
+            game: *obj*
+                Class object that includes information as to whether the game is running and
+                which player is currently active.
+            players: *obj*
+                Class object that includes all active players and their positions.
+            walls: *obj*
+                Class object that includes all played walls and their positions.
+            pos: *tuple* (int, int)
+                (x, y): 
+                The position of the mouse.
+
+        **Returns**
+            N/A
         '''
         # Fill the full window with the set background color.
         self.win.fill(self.background_color)
@@ -458,9 +529,9 @@ class Window:
 
         # Draw a player's possible moves if they are selected.
         if players.player_count > 0:
-            for p in players.players:
-                if p.selected == True:
-                    current_p.draw_pos_moves(self, current_p.coord, walls, players)
+            for player in players.players:
+                if player.selected == True:
+                    player.draw_pos_moves(self, player.coord, walls, players)
 
         # Update the pygame window display.
         pygame.display.update()

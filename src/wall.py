@@ -4,24 +4,53 @@ import pygame
 
 class Wall:
     '''
-    Create a wall object that blocks player movement.
+    This class creates and controls a wall object that blocks player movement.
     
-    Add more info about the class here.
+    Values:
+        * coord1 (Coord: obj)
+        * coord2 (Coord: obj)
+        * coord3 (Coord: obj)
+        * coord4 (Coord: obj)
+        * orient (str)
+        * cross_wall (Wall: obj)
+        * win (Window: obj)
+        * rect (tuple, int)
+        * rect_small (tuple, int)
+        * color (tuple, int)
+        * info (tuple, obj)
+
+    Functions:
+        * __init__(self, width, height, square_size, wall_width, title, background_color)
+        * set_color(self, new_color)
+        * make_cross_wall(self)
+        * make_rect(self)
+        * make_rect_small(self)
+        * draw(self, color)
+        * __eq__(self, other)
     '''
 
     def __init__(self, coord1, coord2, win):
         '''
-        Initialize the Wall class.
-        
-        Add more info about initialization parameters here.
+        This function initializes the Wall class.
+
+        **Parameters**
+            coord1: *Coord obj*
+                The coordinate of the space adjacent to the wall space.
+            coord2: *Coord obj*
+                The coordinate of the space adjacent to the wall space on the other side.
+            win: *Window obj*
+                The window display object.
+
+        **Returns**
+            N/A
         '''
 
-        # Set the token spaces immediately adjacent to the wall space
+        # Set the piece spaces immediately adjacent to the wall space
         # that was selected to the first two coordinates.
         self.coord1 = coord1
         self.coord2 = coord2
 
-        # If the token spaces are in the same row of token spaces on the grid,
+        # If the piece spaces are in the same row of piece spaces on the grid,
         if coord1.same_row(coord2):
             # Set the other affected coordinates to be the spaces to the south
             # of the affected spaces.
@@ -30,7 +59,7 @@ class Wall:
             # Set the orientation of the wall with reference to the original space.
             self.orient = "e"
         
-        # If the token spaces are in the same column of token spaces on the grid,
+        # If the piece spaces are in the same column of piece spaces on the grid,
         if coord1.same_column(coord2):
             # Set the other affected coordinates to be the spaces to the east
             # of the affected spaces.
@@ -39,37 +68,51 @@ class Wall:
             # Set the orientation of the wall with reference to the original space.
             self.orient = "s"
 
+        # Set a variable holder for the cross wall that will conflict with this wall if it is played.
         self.cross_wall = None
-
-        # Window attributes.
+        # Set the window variable for the game window.
         self.win = win
         # Make the wall a rectangle shape.
         self.rect = self.make_rect()
-        # Make the wall rectangle a small rectangle (as compared to a token space)
+        # Make the wall rectangle a small rectangle (as compared to the full wall length)
         # for mouse selection purposes.
         self.rect_small = self.make_rect_small()
-        # Leave the color of the Wall rectangle clear.
-        '''Check to see why this couldn't be gray for when the user hovers over.'''
+        # Leave the color of the Wall rectangle clear upon initiation.
         self.color = None
 
         # Set info for the position and orientation of the wall.
         self.info = (coord1.x, coord1.y, self.orient)
 
+
     def set_color(self, new_color):
         '''
-        Set the wall's color.
-        
-        Add more info about this function's parameters here.
+        This function updates the wall's color to a new color that is provided.
+
+        **Parameters**
+            new_color: *tuple: int* (int, int, int)
+                (R, G, B):
+                New color of the wall to be displayed.
+
+        **Returns**
+            N/A
         '''
+
+        # Change the wall's color to a new color that is provided.
         self.color = new_color
+
 
     def make_cross_wall(self):
         '''
-        Return the cross wall that cannot be played if this wall is played
-        because the walls would be crossing over one another and interfering.
+        This function sets the position of the cross wall that cannot be played with 
+        the current wall because the walls would be crossing over one another and interfering.
         
-        Add more info about this function's parameters here.
+        **Parameters**
+            N/A
+
+        **Returns**
+            N/A
         '''
+
         # If the orientation of the wall was on the east of the original space,
         if self.orient == "e":
             # Set the cross_wall to be to the south of that space.
@@ -80,11 +123,19 @@ class Wall:
             # Set the cross wall to be to the east of that space.
             self.cross_wall = self.coord1.wall_east
 
+
     def make_rect(self):
         '''
-        Return the rectangle corresponding to the full-length wall on the window.
+        This function returns the rectangle corresponding to 
+        the full-length wall on the window.
 
-        Add more info about this function's parameters here.
+        **Parameters**
+            N/A
+
+        **Returns**
+            wall_rectangle: *tuple: int* (int, int, int, int)
+                (x_pos, y_pos, wall_width, wall_height):
+                Returns the position and size of the wall rectangle space.
         '''
 
         # Bring in the current game window.
@@ -112,12 +163,20 @@ class Wall:
                     2*win.square_size + win.wall_width, win.wall_width)
         return None
 
+
     def make_rect_small(self):
         '''
-        Return the small rectangle corresponding to the portion of the wall 
+        This function returns the small rectangle corresponding to the portion of the wall 
         adjacent to the original coordinate space on the window.
         
-        Add more info about this function's parameters here.
+        **Parameters**
+            N/A
+
+        **Returns**
+            wall_rectangle_small: *tuple: int* (int, int, int, int)
+                (x_pos, y_pos, wall_width, wall_height):
+                Returns the position and size of the wall rectangle space
+                that the player would select.
         '''
 
         # Bring in the current game window.
@@ -143,19 +202,34 @@ class Wall:
             return (x, y + win.square_size, win.square_size, win.wall_width)
         return None
 
+
     def draw(self, color):
         '''
-        Draw the wall on the window with the color of the player placing it.
+        This function draws the wall on the window with the color of the player placing it.
         
-        Add more info about this function's parameters here.
+        **Parameters**
+            color: *tuple: int* (int, int, int)
+                (R, G, B):
+                Color of the wall to be displayed.
+
+        **Returns**
+            N/A
         '''
+
+        # Draw the wall rectangle on the game window in the color of the player placing it.
         pygame.draw.rect(self.win.win, color, self.rect)
+
 
     def __eq__(self, other):
         '''
         Operator == for two walls.
         
-        Add more info about this function's parameters here.
+        **Parameters**
+            other: *Wall obj*
+                Another wall object to be compared in positioning to the current wall object.
+
+        **Returns**
+            N/A
         '''
         # If the wall is positioned in the same place as another wall, return True.
         if (self.coord1 == other.coord1
@@ -167,16 +241,32 @@ class Wall:
 
 class Walls:
     '''
-    Manage all the walls played.
+    This class manages all the walls played.
     
-    Add more info about the Wall class here.
+    Values:
+        * walls (list)
+        * blocked_coords (dict)
+
+    Functions:
+        * __init__(self)
+        * add_wall(self, wall)
+        * draw(self)
+        * contains(self, wall)
+        * wall_in_walls(self, wall)
+        * can_add(self, wall)
+        * no_wall(self, coord1, coord2)
+        * reset(self)
     '''
 
     def __init__(self):
         '''
-        Initiate the Walls class.
-        
-        Add more info about initialization parameters here.
+        This function initializes the Walls class.
+
+        **Parameters**
+            N/A
+
+        **Returns**
+            N/A
         '''
 
         # Set a list of walls.
@@ -185,11 +275,18 @@ class Walls:
         # Set a dictionary of blocked coordinates.
         self.blocked_coords = {}
 
+
     def add_wall(self, wall):
         '''
-        Add a wall to the grid.
+        This function adds a wall to the game board grid and
+        sets the blocked coordinates for the pieces.
         
-        Add more info about this function's parameters here.
+        **Parameters**
+            wall: *Wall obj*
+                The wall that will be added to the grid.
+
+        **Returns**
+            N/A
         '''
 
         # Append the wall to the list of walls.
@@ -235,23 +332,38 @@ class Walls:
             # Append the adjacent coordinate space as a value to the key.
             d[wall.coord4.pos].append(wall.coord3.pos)
 
+
     def draw(self):
         '''
-        Draw the walls on the game board grid.
+        This function draws the played walls on the game board grid.
         
-        Add more info about this function's parameters here.
+        **Parameters**
+            N/A
+
+        **Returns**
+            N/A
         '''
 
         # Iterate through all played walls.
-        for w in self.walls:
+        for wall in self.walls:
             # Draw them on the game board in their player color.
-            w.draw(w.color)
+            wall.draw(wall.color)
+
 
     def contains(self, wall):
         '''
-        Return True if wall can't be added.
+        This function checks blocked coordinates dictionary to determine if
+        the wall's location already exists on the game board.
+        The function returns True if the wall location exists in the dictionary
+        and False if it does not.
 
-        Add more info about this function's parameters here.
+        **Parameters**
+            wall: *Wall obj*
+                The wall that will be added to the grid.
+
+        **Returns**
+            wall_location_in_dict: *bool*
+                True if the wall location exists in the dictionary of blocked coordinates.
         '''
 
         # Assign d to the dictionary of blocked coordinates and 
@@ -271,42 +383,70 @@ class Walls:
             if wall.coord4.pos in d[wall.coord3.pos]:
                 # then the wall can't be played.
                 return True
-            
+
+        # If the wall coordinates are not in the dictionary, return False. 
         return False
+    
 
     def wall_in_walls(self, wall):
         '''
-        Return True if the wall is in walls.
-        Used to compare whether a prospective wall's cross-wall already has been played.
-        
-        Add more info about this function's parameters here.
+        This function checks whether the wall to be played already exists on the game board.
+        The function returns True if the wall exists in the list of played walls
+        and False if it does not.
+        Function used to compare a wall in question to cross-walls.
+
+        **Parameters**
+            wall: *Wall obj*
+                The wall that will be added to the grid.
+
+        **Returns**
+            wall_in_list_of_walls: *bool*
+                Returns True if the wall in question is in the list of walls.
         '''
 
-        # Index through all played walls
+        # Index through the list of walls.
         for w in self.walls:
-            # Check if the wall in question is already in the list of played walls.
+            # Check if the wall in question is already in the list of walls.
             if wall == w:
                 # If so, return True.
                 return True
+        # If the wall in question is not in the wall list, return False.
         return False
 
     def can_add(self, wall):
         '''
-        Return True if the wall can be added.
-        
-        Add more info about this function's parameters here.
+        This function checks whether a wall can be added to the game board and
+        returns True if it can.
+
+        **Parameters**
+            wall: *Wall obj*
+                The wall that will be added to the grid.
+
+        **Returns**
+            can_add: *bool*
+                Returns True if the wall can be added.
         '''
         
         # Check whether the wall to-be-added already exists or
         # is a cross-wall to a wall that already exists.
         if not self.contains(wall) and not self.wall_in_walls(wall.cross_wall):
             return True
+        
 
     def no_wall(self, coord1, coord2):
         '''
-        Return True is there is no wall between two positions.
+        This function checks whether there is a wall between two coordinates and 
+        returns True is there is no wall between the two space.
         
-        Add more info about this function's parameters here.
+        **Parameters**
+            coord1: *Coord obj*
+                The first coordinate to be used to check for a wall.
+            coord2: *Coord obj*
+                The second coordinate to be used to check for a wall.
+
+        **Returns**
+            no_wall: *bool*
+                Returns True if there is no wall between two coordinates.
         '''
 
         # Assign d to the dictionary of blocked coordinates and 
@@ -327,19 +467,25 @@ class Walls:
             
         # If the coordinate space is not a key to the dictionary,
         return True
+    
 
     def reset(self):
         '''
-        Reset the walls.
+        The function resets the walls on the game board 
+        and the list and dictionary of walls.
         
-        Add more info about this function's parameters here.
+        **Parameters**
+            N/A
+
+        **Returns**
+            N/A
         '''
         
         # Index through all walls.
-        for w in self.walls:
+        for wall in self.walls:
             
             # Reset their colors to empty/clear.
-            w.color = None
+            wall.color = None
         
         # Reset the list of walls.
         self.walls.clear()

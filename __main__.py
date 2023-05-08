@@ -3,13 +3,11 @@ Quoridor
 Mitch Turley
 
 This project will allow the user to virtually play the Quoridor game published by Gigamic games.
-The user may play against another user one-on-one or against a simple bot.
+The user may play against other users on a local machine with between 2 and 4 total players.
 This is the main codeblock to be run when the user desires to play.
 '''
 
 # Import necessary libraries.
-import os
-import sys
 import pygame
 
 # Controls window class object.
@@ -26,9 +24,6 @@ from src.wall import Walls
 
 # Controls game mechanics.
 from src.game import Game
-
-# Controls the board coordinates
-from src.board import Coord
 
 # from src.pathfinder import *
 
@@ -120,27 +115,28 @@ def play_game():
                         # return the corresponding players.
                         players = click_button_4_players(win, coords)
 
-                    # Check to see if the user clicked the button determining whether
-                    # a players will be a human or bot.
-                    elif win.button_hb_player_1.show == True and \
-                        win.button_hb_player_1.click(pos) == True:
-                        # Alternate from human to bot and back as the button is clicked.
-                        click_button_hb_player_1(win)
+                    # # Uncomment once bot functionality is added.
+                    # # Check to see if the user clicked the button determining whether
+                    # # a players will be a human or bot.
+                    # elif win.button_hb_player_1.show == True and \
+                    #     win.button_hb_player_1.click(pos) == True:
+                    #     # Alternate from human to bot and back as the button is clicked.
+                    #     click_button_hb_player_1(win)
 
-                    elif win.button_hb_player_2.show == True and \
-                        win.button_hb_player_2.click(pos) == True:
-                        # Alternate from human to bot and back as the button is clicked.
-                        click_button_hb_player_2(win)
+                    # elif win.button_hb_player_2.show == True and \
+                    #     win.button_hb_player_2.click(pos) == True:
+                    #     # Alternate from human to bot and back as the button is clicked.
+                    #     click_button_hb_player_2(win)
 
-                    elif win.button_hb_player_3.show == True and \
-                        win.button_hb_player_3.click(pos) == True:
-                        # Alternate from human to bot and back as the button is clicked.
-                        click_button_hb_player_3(win)
+                    # elif win.button_hb_player_3.show == True and \
+                    #     win.button_hb_player_3.click(pos) == True:
+                    #     # Alternate from human to bot and back as the button is clicked.
+                    #     click_button_hb_player_3(win)
 
-                    elif win.button_hb_player_4.show == True and \
-                        win.button_hb_player_4.click(pos) == True:
-                        # Alternate from human to bot and back as the button is clicked.
-                        click_button_hb_player_4(win)
+                    # elif win.button_hb_player_4.show == True and \
+                    #     win.button_hb_player_4.click(pos) == True:
+                    #     # Alternate from human to bot and back as the button is clicked.
+                    #     click_button_hb_player_4(win)
 
                     # Check to see if they clicked the "Start" button and perform associated tasks.
                     elif win.button_start.show == True and \
@@ -158,7 +154,7 @@ def play_game():
                         setup = False
 
             # Update the display with any new actions or events.
-            win.redraw_window(game, current_p, players, walls, pos)
+            win.redraw_window(game, players, walls, pos)
 
 
         # Main game loop
@@ -168,7 +164,7 @@ def play_game():
             clock.tick(FPS)
 
             # Set the current player to handle their different inputs.
-            current_p = players.players[game.current_player]
+            current_p = players.players[game.current_player_number]
 
             # Get the position of the mouse in order to shade the spaces that is is over.
             pos = pygame.mouse.get_pos()
@@ -287,7 +283,7 @@ def play_game():
                                     win.button_wall.set_show(False)
                                 
             # Update the display with any new actions or events.
-            win.redraw_window(game, current_p, players, walls, pos)
+            win.redraw_window(game, players, walls, pos)
 
         # End game loop
         while end == True:
@@ -334,7 +330,7 @@ def play_game():
                             click_restart(win, coords, players, walls)
                                 
             # Update the display with any new actions or events.
-            win.redraw_window(game, current_p, players, walls, pos)
+            win.redraw_window(game, players, walls, pos)
 
 
     # Quit Pygame if the loop is broken.

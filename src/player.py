@@ -1,7 +1,6 @@
 import pygame
 from src.window import *
 from src.const import Colors
-from src.wall import Walls
 
 
 class Player():
@@ -69,7 +68,7 @@ class Player():
         '''
 
         # If the game is running and the player is the current player,
-        if game.running and game.current_player == self.get_num_player():
+        if game.running and game.current_player_number == self.get_num_player():
             # then they can play.
             return True
     

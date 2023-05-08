@@ -1,3 +1,0 @@
-'''
-Add pathfinder code here.
-'''

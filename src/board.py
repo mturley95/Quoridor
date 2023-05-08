@@ -3,7 +3,12 @@ from src.wall import Wall
 from src.const import Board_Dim
 
 class Coord:
-    '''Create a coordinate.'''
+    '''
+    Create a player space coordinate.
+    
+    Add more info about this class here.
+    '''
+
     def __init__(self, x, y, win, coords):
         self.win = win
         self.coords = coords
@@ -172,15 +177,15 @@ class Coords:
 
     def link_coords(self):
         """Link coords"""
-        for c in self.coords:
-            c.link_coord()
+        for coord in self.coords:
+            coord.link_coord()
 
     def make_walls(self):
         """Make walls"""
-        for c in self.coords:
-            c.make_walls()
-        for c in self.coords:
-            c.make_cross_walls()
+        for coord in self.coords:
+            coord.make_walls()
+        for coord in self.coords:
+            coord.make_cross_walls()
 
     def find_coord(self, x, y):
         """Find the coord corresponding to x and y"""
@@ -188,5 +193,5 @@ class Coords:
 
     def reset(self):
         """Reset coords"""
-        for c in self.coords:
-            c.occupied = False
+        for coord in self.coords:
+            coord.occupied = False
