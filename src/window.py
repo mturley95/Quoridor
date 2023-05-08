@@ -74,7 +74,7 @@ class Window:
     '''
 
     def __init__(self, width = Screen_Dim.WIDTH, height = Screen_Dim.HEIGHT, square_size = Board_Dim.SQUARE_SIZE, wall_width = Board_Dim.WALL_WIDTH,
-                 title = "Quoridor", background_color = Colors.silver):
+                 title = "Quoridor", background_color = Colors.SILVER):
         '''
         This function initializes the Window class.
 
@@ -96,6 +96,7 @@ class Window:
             N/A
         '''
         
+        # Assign all variables to the class.
         self.width = width
         self.height = height
         # Assign a window size tuple based on give width and height.
@@ -126,16 +127,16 @@ class Window:
 
         # Display game info.
         self.welcome = Text("Welcome to Quoridor!", (self.top_left[0] + 50, self.height - 70),\
-                         Colors.black, size=45)
+                         Colors.BLACK, size=45)
 
         # Display the title of the game.
         self.title = Text("Quoridor", 
                           (self.side_board + 115, 50), 
-                          Colors.black, size=50)
+                          Colors.BLACK, size=50)
         
         # Display the info text.
         self.info = Text("", (self.side_board + 50, 150), \
-                         Colors.black, size = 40)
+                         Colors.BLACK, size = 40)
         
         # Set game board coordinates.
         self.coords = Coords(self)
@@ -143,81 +144,81 @@ class Window:
         # Require the user to select how many players will play.
         self.how_many_players = Text("Select the number of players for this game.", 
                                      (self.side_board + 25, 150), 
-                                     Colors.black, size = 20)
+                                     Colors.BLACK, size = 20)
 
         # Add player count buttons for the user to make that selection.
         self.button_2_players = Button("2", 
                                        self.side_board + 100, 200, 
-                                       Colors.red, 40)
+                                       Colors.RED, 40)
         self.button_3_players = Button("3", 
                                        self.side_board + 200, 200, 
-                                       Colors.red, 40)
+                                       Colors.RED, 40)
         self.button_4_players = Button("4", 
                                        self.side_board + 300, 200, 
-                                       Colors.red, 40)
+                                       Colors.RED, 40)
         
         # Add text asking the user how many players will play. 
         # Default is human.
         self.human_or_bot = Text("Will each player be a human or a bot?", 
                                  (self.side_board + 40, 300), 
-                                 Colors.black, size = 20, show = False)
+                                 Colors.BLACK, size = 20, show = False)
         
         # Add text for each human or bot so the user knows 
         # which player they are selecting.
         self.player_1_t = Text("Player 1", 
                                (self.side_board + 40, 340), 
-                               Colors.blue, size = 18, show = False)
+                               Colors.BLUE, size = 18, show = False)
         self.player_2_t = Text("Player 2", 
                                (self.side_board + 140, 340), 
-                               Colors.red, size = 18, show = False)
+                               Colors.RED, size = 18, show = False)
         self.player_3_t = Text("Player 3", 
                                (self.side_board + 240, 340), 
-                               Colors.green, size = 18, show = False)
+                               Colors.GREEN, size = 18, show = False)
         self.player_4_t = Text("Player 4", 
                                (self.side_board + 340, 340), 
-                               Colors.yellow, size = 18, show = False)
+                               Colors.YELLOW, size = 18, show = False)
         
         # Add text stating that bots aren't ready yet.
         # Comment out once bots implemented.
         self.bot_not_ready = Text("Bot functionality has not been implemented yet.", 
                                  (self.side_board, 430), 
-                                 Colors.black, size = 20, show = False)
+                                 Colors.BLACK, size = 20, show = False)
         
         # Add buttons for the user to click selecting each player as either
         # human player or a bot.
         self.button_hb_player_1 = Button("H", 
                                          self.side_board + 50, 370, 
-                                         Colors.red, 40, show = False)
+                                         Colors.RED, 40, show = False)
         self.button_hb_player_2 = Button("H", 
                                          self.side_board + 150, 370, 
-                                         Colors.red, 40, show = False)
+                                         Colors.RED, 40, show = False)
         self.button_hb_player_3 = Button("H", 
                                          self.side_board + 250, 370, 
-                                         Colors.red, 40, show = False)
+                                         Colors.RED, 40, show = False)
         self.button_hb_player_4 = Button("H", 
                                          self.side_board + 350, 370, 
-                                         Colors.red, 40, show = False)
+                                         Colors.RED, 40, show = False)
 
         # Add start button to start the game and lock in settings.
         self.button_start = Button("Start", 
                                    self.side_board + 70, 570, 
-                                   Colors.red)
+                                   Colors.GREEN, show = False)
         
         # Add wall button for the user to click and 
         # state their intentions to play a wall.
         self.button_wall = Button("Wall", 
                                   self.side_board + 160, 500, 
-                                  Colors.red, show = False)
+                                  Colors.RED, show = False)
         
         # Add restart button for the user to restart the game if desired.
         self.button_restart = Button("Restart", 
                                      self.side_board + 70, 570, 
-                                     Colors.red, show = False)
+                                     Colors.RED, show = False)
         
         # Add quit button for the user to quit the game if desired.
         self.button_quit = Button("Quit", 
                                   self.side_board + 250, 570, 
-                                  Colors.red)
+                                  Colors.RED)
 
 
     def update_info(self, text, color = None):
@@ -263,43 +264,43 @@ class Window:
                       9 * self.square_size + 10 * self.wall_width, \
                       9 * self.square_size + 10 * self.wall_width)
         # Color the background of the game board white.
-        color = Colors.white
+        color = Colors.WHITE
         # Color the background of the game board on the window.
         pygame.draw.rect(self.win, color, game_board)
 
         # For a coordinate in the grid of coordinates for the game board.
         # The coordinate is already associated with a unique position and 
         # its square size and includes all player spaces.
-        for c in self.coords.coords:
+        for coord in self.coords.coords:
 
             # Set a rectangle: (x, y, win.square_size, win.square_size).
-            rect = c.rect
+            rect = coord.rect
 
             # Returns True if the mouse pos in question is in the rectangle.
             if pos_in_rect(rect, pos):
                 # For the position in the rectangle of a space on the board, 
                 # draw the board gray (for the player spaces).
-                color = Colors.gray
+                color = Colors.GRAY
 
             else:
                 # Otherwise, draw the board light gray for that position.
-                color = Colors.light_gray
+                color = Colors.LIGHT_GRAY
                 
                 # Add wall rectangular space to the east of the game square.
-                wall_east = c.wall_east
+                wall_east = coord.wall_east
 
                 # Add wall rectangular space to the south of the game square.
-                wall_south = c.wall_south
+                wall_south = coord.wall_south
 
                 # Checks to ensure the wall space is in the game board and makes it gray
                 # if the player mouse is on that location (otherwise remains white).
                 if wall_east and pos_in_rect(wall_east.rect_small, pos):
-                    wall_east.draw(Colors.gray)
+                    wall_east.draw(Colors.GRAY)
                 elif wall_south and pos_in_rect(wall_south.rect_small, pos):
-                    wall_south.draw(Colors.gray)
+                    wall_south.draw(Colors.GRAY)
             
             # Draws the pixel on the board with the proper color. 
-            c.draw(color)
+            coord.draw(color)
 
 
     def draw_finish_lines(self, players):
@@ -429,10 +430,10 @@ class Window:
                 # Index through each player.
                 for player in players.players:
                     # Record the player name and how many walls they have remaining.
-                    text_player = Text(f"{player.name}: {player.walls_remain} walls     ", \
-                                (x, y + 50 * player.get_num_player()), player.color)
+                    text_player = Text(f"{player.name}: {player.walls_remain} walls left     ", \
+                                (x - 25, y + 50 * player.get_num_player()), player.color)
                     # Draw the value on the right window.
-                    text_player.draw(self.win, text_player.pos)
+                    text_player.draw(self.win)
 
         # If the number of players has not been determined
         # and the game has not been initiated:
@@ -459,7 +460,7 @@ class Window:
                 # If the button is selected:
                 if button.selected == True:
                     # Set the button color to blue.
-                    button.set_color(Colors.blue)
+                    button.set_color(Colors.BLUE)
                 # Otherwise draw the buttons in red.
                 button.draw(self.win)
 
@@ -480,7 +481,7 @@ class Window:
             # If the text objects are showing,
             if text.show == True:
                 # Draw the text on the window and display it.
-                text.draw(self.win, text.pos)
+                text.draw(self.win)
 
 
     def redraw_window(self, game, players, walls, pos):
@@ -531,7 +532,7 @@ class Window:
         if players.player_count > 0:
             for player in players.players:
                 if player.selected == True:
-                    player.draw_pos_moves(self, player.coord, walls, players)
+                    player.draw_pos_moves(self, walls, players)
 
         # Update the pygame window display.
         pygame.display.update()

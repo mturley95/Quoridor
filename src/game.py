@@ -132,8 +132,7 @@ class Game:
         '''
 
         # If the player wins,
-        if players.players[self.current_player_number].has_win\
-            (players.players[self.current_player_number].coord) == True:
+        if players.players[self.current_player_number].has_win() == True:
             # Print the winner's name.
             self.winner = self.get_name_current(players)
             print(f"{self.winner} wins!")

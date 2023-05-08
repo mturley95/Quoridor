@@ -65,16 +65,16 @@ class Colors:
         N/A
     '''
 
-    red = (255, 0, 0)
-    blue = (0, 0, 255)
-    green = (50, 180, 110)
-    yellow = (255, 255, 50)
-    purple = (255, 0, 255)
-    white = (255, 255, 255)
-    black = (0, 0, 0)
-    silver = (225, 225, 225)
-    light_gray = (200, 200, 200)
-    gray = (128, 128, 128)
+    RED = (255, 0, 0)
+    BLUE = (0, 0, 255)
+    GREEN = (50, 180, 110)
+    YELLOW = (255, 255, 50)
+    PURPLE = (255, 0, 255)
+    WHITE = (255, 255, 255)
+    BLACK = (0, 0, 0)
+    SILVER = (225, 225, 225)
+    LIGHT_GRAY = (200, 200, 200)
+    GRAY = (128, 128, 128)
 
 
 class Icons:

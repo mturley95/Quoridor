@@ -48,17 +48,17 @@ Project used the following libraries:
 ## Launch and How to Use
 To run this project, open __main__.py and run the code using Python 3.10.
 
-Once the code is running, a window will pop up. First, select the number of users playing the game. Then, click start when ready to begin.
+Once the code is running, a window will pop up. First, select the number of users playing the game by clicking on one of the buttons with the numbers 2, 3, or 4. Then, click the green start button when ready to begin.
 
-The active player will display in the info box in the top-left corner of the display. In order to make a move, first select either the active player's pawn on the game board or the wall button on the right of the screen.
+The active player will display in the info box in the top-right corner of the display. In order to make a move, that player must first select either the active player's pawn on the game board or the wall button on the right of the screen.
 
 If the active player's pawn is selected, the possible movement spaces will be displayed. Select one of the possible moves to make a move with the pawn.
 
-If the wall button is selected, it will appear blue. Place a wall in an open wall space by clicking on that space while the wall button is selected.
+If the wall button is selected, it will appear blue. Place a wall in an open wall space by clicking on that space while the wall button is selected (blue).
 
-The player may restart the game and go back to the setup screen at any time.
+The player may restart the game and go back to the setup screen at any time by clicking on the red restart button.
 
-The player may select the quit button to exit the game window at any time.
+The player may select the quit button to exit the game window at any time by clicking on the red quit button.
 
 ## Features
 Final project features:
@@ -77,7 +77,7 @@ Final project features:
 13.  Display of winning player info on the GUI when winning move is made.
 
 ## Status
-This release allows the for Quoridor game to be played between two to four individuals. Once a winner has been determined, it allows the user to restart the game if they want to play another game.
+This release allows the for the Quoridor game to be played between two to four individuals. Once a winner has been determined, it allows the user to restart the game if they want to play another game.
 
 ### Future work:
 1.  Pathfinder functionality to not allow a wall to be placed that blocks a pawn from reaching their finish line.
@@ -89,7 +89,7 @@ This release allows the for Quoridor game to be played between two to four indiv
 7.  Game record tracker: fewest turns for victorious game.
 8.  Game record tracker: most walls left in inventory for victorious game.
 9.  Remote play for users to play each other online using a server.
-10.  Message-based plays for a player to play moves over text.
+10. Message-based plays for a player to play moves over text.
 11. More complex bot strategy and difficulty levels.
 12. 3D GUI.
 

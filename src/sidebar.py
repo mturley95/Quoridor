@@ -4,13 +4,31 @@ from src.player import Players
 
 def click_restart(win, coords, players, walls):
     '''
-    When the restart button is clicked,
-    perform the following actions:
+    This function resets the game board to setup mode and 
+    clears the game board contents when the reset button is clicked.
     
-    Add more info about this function's parameters here.
+    **Parameters**
+        win: *Window obj*
+            The current game board window that is being displayed.
+        coords: *Coords obj*
+            Contains information for the game board coordinates.
+        players: *Players obj*
+            Contains information about all of the players in the game.
+        walls: *Walls obj*
+            Contains information about all of the walls played on the game board.
+
+    **Returns**
+        setup: *bool*
+            Returns setup to True to return the game to setup mode.
+        running: *bool*
+            Returns running to False to exit the game from running.
+        end: *bool*
+            Returns end to False to exit the end-game screen.
+        players: *Players obj*
+            Resets the number of players in the game to zero for initial setup.
     '''
 
-    # Stop the game running.
+    # Stop the game running and return to the setup window.
     setup = True
     running = False
     end = False
@@ -59,10 +77,18 @@ def click_restart(win, coords, players, walls):
 
 def click_button_2_players(win, coords):
     '''
-    When the 2_players button is clicked,
-    perform the following actions:
+    This function selects the number of players to be two and 
+    continues setup to ask about the number of bots in the game.
     
-    Add more info about this function's parameters here.
+    **Parameters**
+        win: *Window obj*
+            The current game board window that is being displayed.
+        coords: *Coords obj*
+            Contains information for the game board coordinates.
+
+    **Returns**
+        players: *Players obj*
+            Sets the number of players in the game to two.
     '''
     
     # Show the selected button for the number of players.
@@ -70,7 +96,7 @@ def click_button_2_players(win, coords):
     win.button_3_players.set_selected(False)
     win.button_4_players.set_selected(False)
 
-    # Show the human or bot question and the options for the those players.
+    # Show the human or bot question and the options for the number of players.
     win.human_or_bot.set_show(True)
     win.player_1_t.set_show(True)
     win.player_2_t.set_show(True)
@@ -85,7 +111,7 @@ def click_button_2_players(win, coords):
     # Stop showing the welcome text.
     win.welcome.set_show(False)
 
-    # Show the start button if ready to begin.
+    # Show the start button that the player may select if they are ready to begin.
     win.button_start.set_show(True)
 
     # Set the player_count = 2
@@ -97,10 +123,18 @@ def click_button_2_players(win, coords):
 
 def click_button_3_players(win, coords):
     '''
-    When the 3_players button is clicked,
-    perform the following actions:
+    This function selects the number of players to be three and 
+    continues setup to ask about the number of bots in the game.
     
-    Add more info about this function's parameters here.
+    **Parameters**
+        win: *Window obj*
+            The current game board window that is being displayed.
+        coords: *Coords obj*
+            Contains information for the game board coordinates.
+
+    **Returns**
+        players: *Players obj*
+            Sets the number of players in the game to three.
     '''
         
     # Show the selected button for the number of players.
@@ -108,7 +142,7 @@ def click_button_3_players(win, coords):
     win.button_3_players.set_selected(True)
     win.button_4_players.set_selected(False)
 
-    # Show the human or bot question and the options for the those players.
+    # Show the human or bot question and the options for the number of players.
     win.human_or_bot.set_show(True)
     win.player_1_t.set_show(True)
     win.player_2_t.set_show(True)
@@ -123,7 +157,7 @@ def click_button_3_players(win, coords):
     # Stop showing the welcome text.
     win.welcome.set_show(False)
 
-    # Show the start button if ready to begin.
+    # Show the start button that the player may select if they are ready to begin.
     win.button_start.set_show(True)
 
     # Set the player_count = 3
@@ -135,10 +169,18 @@ def click_button_3_players(win, coords):
 
 def click_button_4_players(win, coords):
     '''
-    When the 4_players button is clicked,
-    perform the following actions:
+    This function selects the number of players to be four and 
+    continues setup to ask about the number of bots in the game.
     
-    Add more info about this function's parameters here.
+    **Parameters**
+        win: *Window obj*
+            The current game board window that is being displayed.
+        coords: *Coords obj*
+            Contains information for the game board coordinates.
+
+    **Returns**
+        players: *Players obj*
+            Sets the number of players in the game to four.
     '''
 
     # Show the selected button for the number of players.
@@ -146,7 +188,7 @@ def click_button_4_players(win, coords):
     win.button_3_players.set_selected(False)
     win.button_4_players.set_selected(True)
 
-    # Show the human or bot question and the options for the those players.
+    # Show the human or bot question and the options for the the number of players.
     win.human_or_bot.set_show(True)
     win.player_1_t.set_show(True)
     win.player_2_t.set_show(True)
@@ -161,7 +203,7 @@ def click_button_4_players(win, coords):
     # Stop showing the welcome text.
     win.welcome.set_show(False)
 
-    # Show the start button if ready to begin.
+    # Show the start button that the player may select if they are ready to begin.
     win.button_start.set_show(True)
 
     # Set the player_count = 4
@@ -173,10 +215,15 @@ def click_button_4_players(win, coords):
 
 def click_button_hb_player_1(win):
     '''
-    When the human or bot button 1 is clicked,
-    perform the following actions:
+    This function selects whether player 1 will play as a human or bot
+    based on the selected value of the button.
     
-    Add more info about this function's parameters here.
+    **Parameters**
+        win: *Window obj*
+            The current game board window that is being displayed.
+
+    **Returns**
+        N/A
     '''
 
     # If the button was not selected, now select it.
@@ -189,10 +236,15 @@ def click_button_hb_player_1(win):
 
 def click_button_hb_player_2(win):
     '''
-    When the human or bot button 2 is clicked,
-    perform the following actions:
+    This function selects whether player 2 will play as a human or bot
+    based on the selected value of the button.
     
-    Add more info about this function's parameters here.
+    **Parameters**
+        win: *Window obj*
+            The current game board window that is being displayed.
+
+    **Returns**
+        N/A
     '''
 
     # If the button was not selected, now select it.
@@ -205,10 +257,15 @@ def click_button_hb_player_2(win):
 
 def click_button_hb_player_3(win):
     '''
-    When the human or bot button 3 is clicked,
-    perform the following actions:
+    This function selects whether player 3 will play as a human or bot
+    based on the selected value of the button.
     
-    Add more info about this function's parameters here.
+    **Parameters**
+        win: *Window obj*
+            The current game board window that is being displayed.
+
+    **Returns**
+        N/A
     '''
 
     # If the button was not selected, now select it.
@@ -218,12 +275,18 @@ def click_button_hb_player_3(win):
     else:
         win.button_hb_player_3.set_selected(False)
 
+
 def click_button_hb_player_4(win):
     '''
-    When the human or bot button 4 is clicked,
-    perform the following actions:
+    This function selects whether player 4 will play as a human or bot
+    based on the selected value of the button.
     
-    Add more info about this function's parameters here.
+    **Parameters**
+        win: *Window obj*
+            The current game board window that is being displayed.
+
+    **Returns**
+        N/A
     '''
 
     # If the button was not selected, now select it.
@@ -236,10 +299,16 @@ def click_button_hb_player_4(win):
 
 def click_button_start(win):
     '''
-    When the start button is clicked,
-    perform the following actions:
+    This function starts the game in running mode when the start button is clicked.
     
-    Add more info about this function's parameters here.
+    **Parameters**
+        win: *Window obj*
+            The current game board window that is being displayed.
+
+    **Returns**
+        player_types: *dict*
+            A dictionary of player types whether each player is a human or a bot
+            for all players in-play at the start of the game.
     '''
 
     # Stop showing buttons and requests for how many players
@@ -257,6 +326,7 @@ def click_button_start(win):
     win.button_hb_player_2.set_show(False)
     win.button_hb_player_3.set_show(False)
     win.button_hb_player_4.set_show(False)
+    win.bot_not_ready.set_show(False)
 
     # Show the wall button for playing walls in the game.
     win.button_wall.set_show(True)
@@ -290,9 +360,19 @@ def click_button_start(win):
         player_types[4] = ['human']
 
     return player_types
-    # Do something with player_types in another function
+
 
 def click_button_wall(win):
+    '''
+    This function selects the wall button to allow the active player to play a wall.
+    
+    **Parameters**
+        win: *Window obj*
+            The current game board window that is being displayed.
+
+    **Returns**
+        N/A
+    '''
 
     # If the button was not selected, now select it.
     if win.button_wall.selected == False:
@@ -300,7 +380,3 @@ def click_button_wall(win):
     # If the button was selected, deselect it.
     else:
         win.button_wall.set_selected(False)
-    # wall.select()
-    '''
-    Add check to ensure this button is selected when playing a wall.
-    '''

@@ -88,7 +88,7 @@ def play_game():
                     pos = pygame.mouse.get_pos()
 
                     # Check to see if they clicked on the "Quit" button.
-                    if win.button_quit.click(pos):
+                    if win.button_quit.click_on_button(pos):
                         # If so, stop the program running and close the window.
                         setup = False
                         running = False
@@ -98,19 +98,19 @@ def play_game():
                     # Check to see if the user clicked the button determining the
                     # number of players that will play and perform associated tasks.
                     elif win.button_2_players.show == True and \
-                        win.button_2_players.click(pos) == True:                        
+                        win.button_2_players.click_on_button(pos) == True:                        
                         # Identify the 2-player button as clicked and 
                         # return the corresponding players.
                         players = click_button_2_players(win, coords)
 
                     elif win.button_3_players.show == True and \
-                        win.button_3_players.click(pos) == True:
+                        win.button_3_players.click_on_button(pos) == True:
                         # Identify the 3-player button as clicked and 
                         # return the corresponding players.
                         players = click_button_3_players(win, coords)
 
                     elif win.button_4_players.show == True and \
-                        win.button_4_players.click(pos) == True:
+                        win.button_4_players.click_on_button(pos) == True:
                         # Identify the 4-player button as clicked and 
                         # return the corresponding players.
                         players = click_button_4_players(win, coords)
@@ -119,29 +119,29 @@ def play_game():
                     # # Check to see if the user clicked the button determining whether
                     # # a players will be a human or bot.
                     # elif win.button_hb_player_1.show == True and \
-                    #     win.button_hb_player_1.click(pos) == True:
+                    #     win.button_hb_player_1.click_on_button(pos) == True:
                     #     # Alternate from human to bot and back as the button is clicked.
                     #     click_button_hb_player_1(win)
 
                     # elif win.button_hb_player_2.show == True and \
-                    #     win.button_hb_player_2.click(pos) == True:
+                    #     win.button_hb_player_2.click_on_button(pos) == True:
                     #     # Alternate from human to bot and back as the button is clicked.
                     #     click_button_hb_player_2(win)
 
                     # elif win.button_hb_player_3.show == True and \
-                    #     win.button_hb_player_3.click(pos) == True:
+                    #     win.button_hb_player_3.click_on_button(pos) == True:
                     #     # Alternate from human to bot and back as the button is clicked.
                     #     click_button_hb_player_3(win)
 
                     # elif win.button_hb_player_4.show == True and \
-                    #     win.button_hb_player_4.click(pos) == True:
+                    #     win.button_hb_player_4.click_on_button(pos) == True:
                     #     # Alternate from human to bot and back as the button is clicked.
                     #     click_button_hb_player_4(win)
 
                     # Check to see if they clicked the "Start" button and perform associated tasks.
                     elif win.button_start.show == True and \
                         players.player_count > 0 and \
-                        win.button_start.click(pos) == True:
+                        win.button_start.click_on_button(pos) == True:
                         # Record the number of players and types (human or bot) when the game is started.
                         player_types = click_button_start(win)
                         game.set_player_count(players.player_count)
@@ -186,7 +186,7 @@ def play_game():
                     pos = pygame.mouse.get_pos()
 
                     # Check to see if they clicked on the "Quit" button.
-                    if win.button_quit.click(pos) == True:
+                    if win.button_quit.click_on_button(pos) == True:
                         # Stop the program running and close the window.
                         setup = False
                         running = False
@@ -195,7 +195,7 @@ def play_game():
 
                     # Check to see if they clicked the "Restart" button.
                     elif win.button_restart.show == True and \
-                        win.button_restart.click(pos) == True:
+                        win.button_restart.click_on_button(pos) == True:
                         
                         # Perform the restart button actions and 
                         # record the updated status of the setup window (active),
@@ -207,7 +207,7 @@ def play_game():
                     # Check to see if they selected to play wall using the wall button.
                     elif win.button_wall.show == True and \
                         current_p.can_play_wall(game) == True and \
-                        win.button_wall.click(pos) == True:
+                        win.button_wall.click_on_button(pos) == True:
                         
                         # Select the wall button to prepare to play a wall.
                         click_button_wall(win)
@@ -217,7 +217,7 @@ def play_game():
                     # Check to see if they selected to play a wall but are out of walls.
                     elif win.button_wall.show == True and \
                         current_p.can_play_wall(game) != True and \
-                        win.button_wall.click(pos) == True:
+                        win.button_wall.click_on_button(pos) == True:
                         
                         # Update the info tab to state that that player is out of walls.
                         # Do not select the walls button.
@@ -227,7 +227,7 @@ def play_game():
                     # Check to see if they selected their piece and show possible moves.
                     elif players.player_count > 0 and \
                         current_p.can_play(game) == True and \
-                        current_p.click(pos) == True:
+                        current_p.click_on_player(pos) == True:
                         
                         # Set their piece to be selected and perform associated actions.
                         current_p.set_selected(True, win, walls, players)
@@ -240,8 +240,8 @@ def play_game():
                     elif win.button_wall.selected == True:
                         
                         # If possible, play a wall.
-                        # wall_select = player.play_put_wall(pos, coords, walls, n, pf, players)
-                        wall_select = current_p.play_put_wall(pos, coords, walls, players)
+                        # wall_select = player.play_put_wall(pos, coords, walls, pf, players)
+                        wall_select = current_p.play_put_wall(pos, coords, walls)
                         
                         # If the player successfully selected a wall space:
                         if wall_select != None:
@@ -258,7 +258,7 @@ def play_game():
                     # If the player's pawn was previously selected and is selected again:
                     elif players.player_count > 0 and \
                         current_p.selected == True and \
-                        current_p.click(pos):
+                        current_p.click_on_player(pos):
                         # Deselect the player's piece.
                         current_p.set_selected(False, win, walls, players)
 
@@ -268,7 +268,7 @@ def play_game():
                         # Check whether a possible move was selected by the mouse
                         # for all possible moves.
                         for pos_coord in current_p.pos_moves(current_p.coord, walls, players):
-                            if pos_coord.click(pos):
+                            if pos_coord.click_on_coord(pos):
                                 # Play the move that was selected.
                                 current_p.play_move(pos_coord)
                                 # Deselect that player's pawn.
@@ -311,7 +311,7 @@ def play_game():
                     pos = pygame.mouse.get_pos()
 
                     # Check to see if they clicked on the "Quit" button.
-                    if win.button_quit.click(pos) == True:
+                    if win.button_quit.click_on_button(pos) == True:
                         # Stop the program running and close the window.
                         setup = False
                         running = False
@@ -320,7 +320,7 @@ def play_game():
 
                     # Check to see if they clicked the "Restart" button.
                     elif win.button_restart.show == True and \
-                        win.button_restart.click(pos) == True:
+                        win.button_restart.click_on_button(pos) == True:
                         
                         # Perform the restart button actions and 
                         # record the updated status of the setup window (active),
