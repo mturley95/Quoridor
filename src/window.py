@@ -8,9 +8,21 @@ from src.board import Coords
 
 def pos_in_rect(rect, pos):
     '''
-    Return True if pos is in the rectangle.
+    This function returns True if the position is in the rectangle.
     
-    Add more info about the function here.
+    **Parameters**
+
+        rect: *tuple* (int, int, int, int)
+            (x, y, x_width, y_height):
+            The top left points of a rectangle and its width and height.
+        pos: *tuple* (int, int)
+            (x, y):
+            A position to be assessed if it is in the rectangle provided.
+
+    **Returns**
+
+        position_in_rectange: *bool*
+            Returns whether the position is in the rectangle (True) or not (False).
     '''
 
     # Separates the position tuple into x and y values.
@@ -35,17 +47,54 @@ def pos_in_rect(rect, pos):
 
 class Window:
     '''
-    Create the pop-up game window with instructions on how to update it.
+    This class creates and controls the pygame GUI window object and 
+    all buttons and manipulations of its display.
     
-    Add more info about the Window class here.
+    Values:
+        * width (int)
+        * height (int)
+        * window_size (tuple, int)
+        * square_size (int)
+        * wall_width (int)
+        * title (str)
+        * background_color (tuple, int)
+        * win (obj)
+        * top_left (tuple, int)
+        * side_board (int)
+        * game_board (tuple, int)
+
+    Functions:
+        * __init__(self, width, height, square_size, wall_width, title, background_color)
+        * update_info(self, text, color)
+        * draw_game_board(self, pos)
+        * draw_finish_lines(self, players)
+        * draw_right_panel_info(self, game, players)
+        * draw_buttons(self)
+        * draw_text(self)
+        * redraw_window(self, game, player, players, walls, pos)
     '''
 
     def __init__(self, width = Screen_Dim.WIDTH, height = Screen_Dim.HEIGHT, square_size = Board_Dim.SQUARE_SIZE, wall_width = Board_Dim.WALL_WIDTH,
                  title = "Quoridor", background_color = Colors.silver):
         '''
-        Initialize the Window class.
-        
-        Add more info about initialization parameters here.
+        This function initializes the Window class.
+
+        **Parameters**
+            width: *int*
+                The width of the display window.
+            height: *int*
+                The height of the display window.
+            square_size: *int*
+                The size of one space on the game board.
+            wall_width: *int*
+                The width of one wall on the game board.
+            title: *str*
+                The title of the game.
+            background_color: *tuple*
+                The color of the background of the window.
+
+        **Returns**
+            N/A
         '''
         
         self.width = width
@@ -250,7 +299,7 @@ class Window:
                     # Set font and size based on input parameters.
                     font = pygame.font.SysFont("Arial", 30)
                     # Render the text in the font and color selected.
-                    text = font.render(f"Player {p.num_player + 1}", 1, p.color, None)
+                    text = font.render(f"Player {p.get_num_player() + 1}", 1, p.color, None)
                     # Rotate the text 180 degrees.
                     rotated_text = pygame.transform.rotate(text, 180)
                     # Draw the text object onto the window at the proper position.
@@ -269,7 +318,7 @@ class Window:
                     # Set font and size based on input parameters.
                     font = pygame.font.SysFont("Arial", 30)
                     # Render the text in the font and color selected.
-                    text = font.render(f"Player {p.num_player + 1}", 1, p.color, None)
+                    text = font.render(f"Player {p.get_num_player() + 1}", 1, p.color, None)
                     # Rotate the text 90 degrees.
                     rotated_text = pygame.transform.rotate(text, 90)
                     # Draw the text object onto the window at the proper position.
@@ -288,7 +337,7 @@ class Window:
                     # Set font and size based on input parameters.
                     font = pygame.font.SysFont("Arial", 30)
                     # Render the text in the font and color selected.
-                    text = font.render(f"Player {p.num_player + 1}", 1, p.color, None)
+                    text = font.render(f"Player {p.get_num_player() + 1}", 1, p.color, None)
                     # Draw the text object onto the window at the proper position.
                     self.win.blit(text, (self.side_board // 2 - 50, self.side_board - 50))
                                   
@@ -335,7 +384,7 @@ class Window:
                 for p in players.players:
                     # Record the player name and how many walls they have remaining.
                     text_p = Text(f"{p.name}: {p.walls_remain} walls     ", \
-                                (x, y + 50 * p.num_player), p.color)
+                                (x, y + 50 * p.get_num_player()), p.color)
                     # Draw the value on the right window.
                     text_p.draw(self.win, text_p.pos)
 

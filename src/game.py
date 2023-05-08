@@ -27,19 +27,6 @@ class Game:
 
     def set_player_count(self, new_player_count):
         self.player_count = new_player_count
-    
-    
-    def add_players(self, player_count):
-        '''
-        Add a player.
-        
-        Add more info about this function's parameters here.
-        '''
-
-        # For the number of players in the game,
-        for num_player in range(player_count):
-            # Assign their names to be "Player X" (ex: "Player 1").
-            self.players.append(f"Player {num_player+1}")
 
 
     def next_player(self, current):

@@ -45,7 +45,8 @@ class Wall:
         self.win = win
         # Make the wall a rectangle shape.
         self.rect = self.make_rect()
-        # Make the wall rectangle a small rectangle (as compared to a token space).
+        # Make the wall rectangle a small rectangle (as compared to a token space)
+        # for mouse selection purposes.
         self.rect_small = self.make_rect_small()
         # Leave the color of the Wall rectangle clear.
         '''Check to see why this couldn't be gray for when the user hovers over.'''
@@ -53,16 +54,6 @@ class Wall:
 
         # Set info for the position and orientation of the wall.
         self.info = (coord1.x, coord1.y, self.orient)
-
-    def __str__(self):
-        '''
-        Defines what is returned when "str()" of the Wall class is called.
-        
-        Add more info about the class here.
-        '''
-        # Determine whether this function is still needed.
-        return ", ".join([str(self.coord1), str(self.coord2),
-                         str(self.coord3), str(self.coord4), self.orient])
 
     def set_color(self, new_color):
         '''

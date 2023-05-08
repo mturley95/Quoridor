@@ -117,10 +117,6 @@ class Coord:
         """Return True if the two coords are on the same column"""
         return self.x == other.x
 
-    def __str__(self):
-        """String format of a coord"""
-        return f"({self.x}, {self.y})"
-
     def __eq__(self, other):
         """Operator == between two coords"""
         return self.x == other.x and self.y == other.y

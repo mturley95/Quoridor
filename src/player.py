@@ -28,9 +28,9 @@ class Player():
         self.walls_remain = walls_remain
         self.selected = selected
 
-    def set_name(self, num_player):
+    def set_default_name(self, num_player):
         '''
-        Set the name of the player.
+        Set the default name of the player.
 
         Add more info about this function's parameters here.
         '''
@@ -69,7 +69,7 @@ class Player():
         '''
 
         # If the game is running and the player is the current player,
-        if game.running and game.current_player == self.num_player:
+        if game.running and game.current_player == self.get_num_player():
             # then they can play.
             return True
     
@@ -98,21 +98,23 @@ class Player():
                         # and that space is not occupied:
                         if pos_move.north is not None and \
                             walls.no_wall(pos_move, pos_move.north) == True and \
-                            pos_move.north.occupied != True:
+                            pos_move.north.is_occupied(players) != True:
                             
                             # Add the space two spaces to the north as a possible move.
                             pos_moves_list.append(pos_move.north)
 
                         if pos_move.north is not None and \
                             walls.no_wall(pos_move, pos_move.north) != True and \
-                            pos_move.east.occupied != True:
+                            walls.no_wall(pos_move, pos_move.east) == True and \
+                            pos_move.east.is_occupied(players) != True:
                             
                             # Add the space two spaces to the north as a possible move.
                             pos_moves_list.append(pos_move.east)
 
                         if pos_move.north is not None and \
                             walls.no_wall(pos_move, pos_move.north) != True and \
-                            pos_move.west.occupied != True:
+                            walls.no_wall(pos_move, pos_move.west) == True and \
+                            pos_move.west.is_occupied(players) != True:
                             
                             # Add the space two spaces to the north as a possible move.
                             pos_moves_list.append(pos_move.west)
@@ -125,21 +127,23 @@ class Player():
                         # and that space is not occupied:
                         if pos_move.south is not None and \
                             walls.no_wall(pos_move, pos_move.south) == True and \
-                            pos_move.south.occupied != True:
+                            pos_move.south.is_occupied(players) != True:
                             
                             # Add the space two spaces to the south as a possible move.
                             pos_moves_list.append(pos_move.south)
 
                         if pos_move.south is not None and \
                             walls.no_wall(pos_move, pos_move.south) != True and \
-                            pos_move.east.occupied != True:
+                            walls.no_wall(pos_move, pos_move.east) == True and \
+                            pos_move.east.is_occupied(players) != True:
                             
                             # Add the space two spaces to the south as a possible move.
                             pos_moves_list.append(pos_move.east)
 
                         if pos_move.south is not None and \
                             walls.no_wall(pos_move, pos_move.south) != True and \
-                            pos_move.west.occupied != True:
+                            walls.no_wall(pos_move, pos_move.west) == True and \
+                            pos_move.west.is_occupied(players) != True:
                             
                             # Add the space two spaces to the south as a possible move.
                             pos_moves_list.append(pos_move.west)
@@ -152,21 +156,23 @@ class Player():
                         # and that space is not occupied:
                         if pos_move.east is not None and \
                             walls.no_wall(pos_move, pos_move.east) == True and \
-                            pos_move.east.occupied != True:
+                            pos_move.east.is_occupied(players) != True:
                             
                             # Add the space two spaces to the east as a possible move.
                             pos_moves_list.append(pos_move.east)
 
                         if pos_move.east is not None and \
                             walls.no_wall(pos_move, pos_move.east) != True and \
-                            pos_move.north.occupied != True:
+                            walls.no_wall(pos_move, pos_move.north) == True and \
+                            pos_move.north.is_occupied(players) != True:
                             
                             # Add the space two spaces to the east as a possible move.
                             pos_moves_list.append(pos_move.north)
 
                         if pos_move.east is not None and \
                             walls.no_wall(pos_move, pos_move.east) != True and \
-                            pos_move.south.occupied != True:
+                            walls.no_wall(pos_move, pos_move.south) == True and \
+                            pos_move.south.is_occupied(players) != True:
                             
                             # Add the space two spaces to the east as a possible move.
                             pos_moves_list.append(pos_move.south)
@@ -179,21 +185,23 @@ class Player():
                         # and that space is not occupied:
                         if pos_move.west is not None and \
                             walls.no_wall(pos_move, pos_move.west) == True and \
-                            pos_move.west.occupied != True:
+                            pos_move.west.is_occupied(players) != True:
                             
                             # Add the space two spaces to the west as a possible move.
                             pos_moves_list.append(pos_move.west)
 
                         if pos_move.west is not None and \
                             walls.no_wall(pos_move, pos_move.west) != True and \
-                            pos_move.north.occupied != True:
+                            walls.no_wall(pos_move, pos_move.north) == True and \
+                            pos_move.north.is_occupied(players) != True:
                             
                             # Add the space two spaces to the west as a possible move.
                             pos_moves_list.append(pos_move.north)
 
                         if pos_move.west is not None and \
                             walls.no_wall(pos_move, pos_move.west) != True and \
-                            pos_move.south.occupied != True:
+                            walls.no_wall(pos_move, pos_move.south) == True and \
+                            pos_move.south.is_occupied(players) != True:
                             
                             # Add the space two spaces to the west as a possible move.
                             pos_moves_list.append(pos_move.south)
@@ -285,7 +293,7 @@ class Player():
                     # else:
                     #     return "You can't block players!"
 
-                    num_player = self.num_player
+                    num_player = self.get_num_player()
                     current_p = players.players[num_player]
                     x = c.x
                     y = c.y
@@ -305,7 +313,7 @@ class Player():
                     current_p.walls_remain -= 1
                     # path_finder.add_wall(wall)
 
-                    return f"Player {current_p.num_player + 1} played a wall."
+                    return f"Player {current_p.get_num_player() + 1} played a wall."
         return None
 
 
@@ -372,45 +380,14 @@ class Players:
         '''
         
         if self.player_count > 0:
-            for p in self.players:
-                if p.name != '':
-                    p.draw(win)
+            for player in self.players:
+                if player.name != '':
+                    player.draw(win)
 
-    def get_player(self, num_player):
-        """Get a player"""
-        return self.players[num_player]
-
-    def play(self, last_play, coords, walls, path_finder):
-        """Make a player play"""
-        data = last_play.split(";")
-        player = self.get_player(int(data[1]))
-        type_play = int(data[2])
-        x, y = int(data[3]), int(data[4])
-        if type_play == 0:   # Move
-            player.coord.occupied = False
-            player.coord = coords.find_coord(x, y)
-            player.coord.occupied = True
-            win = data[5]
-            if win == "w":
-                return False
-            return True
-        elif type_play == 1:    # Wall
-            orient = data[5]
-            coord_wall = coords.find_coord(x, y)
-            if orient == "e":
-                wall = coord_wall.wall_east
-            elif orient == "s":
-                wall = coord_wall.wall_south
-            wall.set_color(player.color)
-            walls.add_wall(wall)
-            player.walls_remain -= 1
-            path_finder.add_wall(wall)
-        return True
-
-    def set_names(self):
+    def set_default_names(self):
         """Set the names of players"""
         for player in self.players:
-            player.set_name(player.num_player)
+            player.set_default_name(player.get_num_player())
 
     def reset(self, coords):
         """Reset the players"""
