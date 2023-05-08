@@ -50,16 +50,16 @@ class Colors:
     This class holds all of the colors that will be displayed on the game window.
     
     Values:
-        * red (tuple)
-        * blue (tuple)
-        * green (tuple)
-        * yellow (tuple)
-        * purple (tuple)
-        * white (tuple)
-        * black (tuple)
-        * silver (tuple)
-        * light_gray (tuple)
-        * gray (tuple)
+        * RED (tuple)
+        * BLUE (tuple)
+        * GREEN (tuple)
+        * YELLOW (tuple)
+        * PURPLE (tuple)
+        * WHITE (tuple)
+        * BLACK (tuple)
+        * SILVE (tuple)
+        * LIGHT_GRAY (tuple)
+        * GRAY (tuple)
 
     Functions:
         N/A
